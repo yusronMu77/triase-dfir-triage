@@ -1,0 +1,238 @@
+{
+  "atribusi": {
+    "aturan": [
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4720_Info_AcctCreated_UsrAcctCreated.yml",
+        "rule_id": "13edce80-2b02-4469-8de4-a3e37271dcdb",
+        "rule_title": "Local User Account Created",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/AccountManagement/UserAccountManagement/Sec_4720_Info_AcctCreated_UsrAcctCreated.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4625_Med_LogonFail_WrongPW_PW-Guessing_Correlation.yml",
+        "rule_id": "23179f25-6fce-4827-bae1-b219deaf563e",
+        "rule_title": "PW Guessing",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4625_Med_LogonFail_WrongPW_PW-Guessing_Correlation.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4698_Info_TaskCreated.yml",
+        "rule_id": "60d768ca-33e8-4f34-b967-14fd7aa18a22",
+        "rule_title": "Task Created",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/ObjectAccess/OtherObjectAccessEvents/Sec_4698_Info_TaskCreated.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4732_High_MemberAddedToLocalGrp_Administrators.yml",
+        "rule_id": "611e2e76-a28f-4255-812c-eb8836b2f5bb",
+        "rule_title": "User Added To Local Admin Grp",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/AccountManagement/SecurityGroupManagement/Sec_4732_High_MemberAddedToLocalGrp_Administrators.yml"
+      },
+      {
+        "author": "Endgame, JHasenbusch (adapted to Sigma for oscd.community)",
+        "license": "DRL-1.1",
+        "rule_file": "proc_creation_win_net_user_add.yml",
+        "rule_id": "6770bbc3-76b1-d22f-6192-d180542dc2a2",
+        "rule_title": "New User Created Via Net.EXE",
+        "sigma_derived_from": "cd219ff3-fa99-45d4-8380-a7d15116c6dc",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/process_creation/proc_creation_win_net_user_add.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4624_Info_Logon-Type-2-Interactive.yml",
+        "rule_id": "7beb4832-f357-47a4-afd8-803d69a5c85c",
+        "rule_title": "Logon (Interactive) *Creds in memory*",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4624_Info_Logon-Type-2-Interactive.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4688_Info_ProcExec.yml",
+        "rule_id": "ac933178-c222-430d-8dcf-17b4f3a2fed8",
+        "rule_title": "Proc Exec",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/DetailedTracking/ProcessCreation/Sec_4688_Info_ProcExec.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_1102_High_SecLogCleared.yml",
+        "rule_id": "c2f690ac-53f8-4745-8cfe-7127dda28c74",
+        "rule_title": "Log Cleared",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/Default/Sec_1102_High_SecLogCleared.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4624_Info_Logon-Type-3-Network.yml",
+        "rule_id": "c7b22878-e5d8-4c30-b245-e51fd354359e",
+        "rule_title": "Logon (Network)",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4624_Info_Logon-Type-3-Network.yml"
+      },
+      {
+        "author": "Nasreddine Bencherchali (Nextron Systems)",
+        "license": "DRL-1.1",
+        "rule_file": "win_security_susp_scheduled_task_creation.yml",
+        "rule_id": "cd7d9f05-3bf6-21f6-6686-e602ab6d72ba",
+        "rule_title": "Suspicious Scheduled Task Creation",
+        "sigma_derived_from": "3a734d25-df5c-4b99-8034-af1ddb5883a4",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/security/win_security_susp_scheduled_task_creation.yml"
+      },
+      {
+        "author": "Michael Haag, Mark Woan (improvements), James Pemberton / @4A616D6573 / oscd.community (improvements)",
+        "license": "DRL-1.1",
+        "rule_file": "proc_creation_win_net_execution.yml",
+        "rule_id": "e0f16539-f1cb-5cb9-0004-f3a040346952",
+        "rule_title": "Net.EXE Execution",
+        "sigma_derived_from": "183e7ea8-ac4b-4c23-9aec-b3dac4e401ac",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/threat-hunting/process_creation/proc_creation_win_net_execution.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4625_Low_LogonFail_WrongPW.yml",
+        "rule_id": "e87bd730-df45-4ae9-85de-6c75369c5d29",
+        "rule_title": "Logon Failure (Wrong Password)",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4625_Low_LogonFail_WrongPW.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4672_Info_AdminLogon.yml",
+        "rule_id": "fdd0b325-8b89-469c-8b0c-e5ddfe39b62e",
+        "rule_title": "Admin Logon",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/SpecialLogon/Sec_4672_Info_AdminLogon.yml"
+      }
+    ],
+    "konfigurasi": [
+      {
+        "author": "Yamato Security",
+        "license": "DRL-1.1",
+        "path": "config/default_details.txt",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/config/default_details.txt"
+      },
+      {
+        "author": "Yamato Security",
+        "license": "DRL-1.1",
+        "path": "config/channel_abbreviations.txt",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/config/channel_abbreviations.txt"
+      },
+      {
+        "author": "Yamato Security",
+        "license": "DRL-1.1",
+        "path": "config/data_mapping/",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/tree/main/config/data_mapping"
+      },
+      {
+        "author": "Yamato Security",
+        "license": "AGPL-3.0-only",
+        "path": "config/mitre_tactics.txt (repo hayabusa)",
+        "uri": "https://github.com/Yamato-Security/hayabusa/blob/v4.3.1/config/mitre_tactics.txt"
+      }
+    ],
+    "lisensi_aturan": {
+      "name": "Detection Rule License (DRL) 1.1",
+      "spdx": "DRL-1.1",
+      "uri": "https://github.com/SigmaHQ/Detection-Rule-License/blob/main/LICENSE.Detection.Rules.md"
+    }
+  },
+  "berkas": [
+    {
+      "baris": 4,
+      "bytes": 3618,
+      "event": 4,
+      "harapan": {
+        "band": "RENDAH",
+        "catatan": "L5 (low) + T0 (tanpa taktik) + A5 (WS-KEU-02 kritikalitas sedang, asumsi katalog aset) + K0 + R0. Tanpa pola insiden; boleh muncul di digest sebagai hitungan.",
+        "pola": "",
+        "skor": 10
+      },
+      "jenis": "jinak",
+      "label": {
+        "mulai_utc": "2026-11-10T07:58:02Z",
+        "selesai_utc": "2026-11-10T07:58:41Z",
+        "teknik": [],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "benign/J2.jsonl",
+      "sha256": "497f3266cbdd1626bc9069dbba6f71e8f086606e5a6954f74245e2b3e34340be",
+      "sintetis": true,
+      "spec": "spec/jinak/J2.toml",
+      "spec_id": "j2",
+      "spec_sha256": "726859244eea730cf9a358aa5d880cf7b42df6de2643acfc63c2ea09edd32d52",
+      "spec_versi": 1
+    },
+    {
+      "baris": 31,
+      "bytes": 24515,
+      "event": 27,
+      "harapan": {
+        "band": "KRITIS",
+        "catatan": "L30 (high) + T22 (lateral-movement, dari \"Net.EXE Execution\") + A10 (WS-ADM-04 kritikalitas tinggi di katalog aset) + K10 (7 taktik: CredAccess, Persis, PrivEsc, Exec, Stealth, Disc, LatMov) + R5 (kartu SEDANG dari spec/riwayat/WS-ADM-04-brute-awal.toml). Tanpa riwayat: 72 KRITIS.",
+        "pola": "P-AKUN-DIAMBILALIH",
+        "skor": 77
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-10T02:14:07Z",
+        "selesai_utc": "2026-11-10T02:31:55Z",
+        "teknik": [
+          "T1110.001",
+          "T1136.001",
+          "T1098",
+          "T1053.005",
+          "T1685.005"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/svc-backup.jsonl",
+      "sha256": "de76a576a6556fdf2077e2ac11cd920cb7505e24e7850a050880983da5d38666",
+      "sintetis": true,
+      "spec": "spec/rantai/svc-backup.toml",
+      "spec_id": "svc-backup",
+      "spec_sha256": "0af48daf78c0583bc8bf5b0c9d3a3ea8bc59a4bde46ecf476fb1c53fa472c47d",
+      "spec_versi": 1
+    },
+    {
+      "baris": 7,
+      "bytes": 4860,
+      "event": 6,
+      "harapan": {
+        "band": "SEDANG",
+        "catatan": "L15 (med, korelasi PW Guessing) + T18 (credential-access) + A10 + K2 (1 taktik) + R0.",
+        "pola": "P-BRUTE-TANPA-AKSES",
+        "skor": 45
+      },
+      "jenis": "riwayat",
+      "label": {
+        "mulai_utc": "2026-11-07T21:40:10Z",
+        "selesai_utc": "2026-11-07T21:41:30Z",
+        "teknik": [
+          "T1110.001"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "history/WS-ADM-04-brute-awal.jsonl",
+      "sha256": "522646cd923f6d054a5443985494944e36dfb61ed250f6632d7338be62d48aea",
+      "sintetis": true,
+      "spec": "spec/riwayat/WS-ADM-04-brute-awal.toml",
+      "spec_id": "ws-adm-04-brute-awal",
+      "spec_sha256": "dc225cb341efaf68623e14213e597a29badbd5b4e867fe3f68ce2ec864f91318",
+      "spec_versi": 1
+    }
+  ],
+  "format": "hayabusa 4.3.1 dfir-timeline -t jsonl -p verbose -U -s",
+  "generator": "astria-samples 0.1.0",
+  "sintetis": true
+}

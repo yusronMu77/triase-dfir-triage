@@ -1,0 +1,118 @@
+{
+  "_catatan": "Katalog sementara milik triage (triage#3, keputusan K2) sampai layanan config siap. Bobot dan ambang adalah contoh awal dari note arsitektur aplikasi 5.2 dan app-triage 5.4-5.5; penyetelan lewat triage#5 (dari hasil eval, bukan tebakan). Setiap perubahan isi bagian wajib menaikkan 'versi' bagian itu.",
+  "taktik": {
+    "versi": 1,
+    "singkatan": {
+      "Recon": "reconnaissance",
+      "ResDev": "resource-development",
+      "InitAccess": "initial-access",
+      "Exec": "execution",
+      "Persis": "persistence",
+      "PrivEsc": "privilege-escalation",
+      "Stealth": "stealth",
+      "DefImpair": "defense-impairment",
+      "CredAccess": "credential-access",
+      "Disc": "discovery",
+      "LatMov": "lateral-movement",
+      "Collect": "collection",
+      "C2": "command-and-control",
+      "Exfil": "exfiltration",
+      "Impact": "impact"
+    },
+    "teknik": {
+      "T1007": ["discovery"],
+      "T1018": ["discovery"],
+      "T1049": ["discovery"],
+      "T1069.001": ["discovery"],
+      "T1069.002": ["discovery"],
+      "T1087.001": ["discovery"],
+      "T1087.002": ["discovery"],
+      "T1135": ["discovery"],
+      "T1201": ["discovery"],
+      "T1021.002": ["lateral-movement"],
+      "T1110.001": ["credential-access"],
+      "T1110.003": ["credential-access"],
+      "T1136.001": ["persistence"],
+      "T1098": ["persistence", "privilege-escalation"],
+      "T1053.005": ["execution", "persistence", "privilege-escalation"],
+      "T1685.005": ["defense-impairment"]
+    }
+  },
+  "skor": {
+    "versi": 1,
+    "level": {"informational": 0, "low": 5, "medium": 15, "high": 30, "critical": 40},
+    "taktik": {
+      "reconnaissance": 0,
+      "resource-development": 0,
+      "discovery": 5,
+      "initial-access": 5,
+      "execution": 10,
+      "persistence": 12,
+      "privilege-escalation": 15,
+      "defense-evasion": 15,
+      "stealth": 15,
+      "defense-impairment": 15,
+      "collection": 15,
+      "credential-access": 18,
+      "command-and-control": 20,
+      "lateral-movement": 22,
+      "exfiltration": 25,
+      "impact": 25
+    },
+    "aset": {"rendah": 0, "sedang": 5, "tinggi": 10, "kritikal": 15},
+    "korelasi_per_taktik": 2,
+    "korelasi_maks": 10,
+    "pengulangan": 5,
+    "pengulangan_hari": 7,
+    "pengulangan_band": ["SEDANG", "TINGGI", "KRITIS"],
+    "band": {"KRITIS": 70, "TINGGI": 50, "SEDANG": 30}
+  },
+  "aset": {
+    "versi": 1,
+    "bawaan": "sedang",
+    "host": {
+      "WS-ADM-04": "tinggi",
+      "WS-KEU-02": "sedang"
+    }
+  },
+  "korelasi": {
+    "versi": 1,
+    "logon_min_gagal": 5,
+    "logon_jendela_menit": 30,
+    "klaster_host_menit": 30,
+    "klaster_akun_menit": 60,
+    "klaster_belah_jam": 6,
+    "maks_bukti_kartu": 200,
+    "maks_bukti_rujukan": 5
+  },
+  "pola_insiden": {
+    "versi": 1,
+    "pola": [
+      {
+        "pola": "P-AKUN-DIAMBILALIH",
+        "prioritas": 1,
+        "syarat": {"all": [
+          {"temuan": "K-LOGON-SUKSES-SETELAH-GAGAL"},
+          {"any": [
+            {"temuan": "K-PERSISTENSI-SETELAH-AKSES"},
+            {"temuan": "K-AKUN-BARU-OLEH-AKUN-DIDUGA"},
+            {"temuan": "K-LOG-DIHAPUS-SETELAH-AKSES"}
+          ]}
+        ]},
+        "judul": "Dugaan pengambilalihan akun {akun} di {host}",
+        "langkah": ["S-PRESERVE-LOGS", "S-VERIFY-WITH-HOST-OWNER", "S-REVIEW-NEW-ACCOUNT", "S-ISOLATION-DECISION"]
+      },
+      {
+        "pola": "P-BRUTE-TANPA-AKSES",
+        "prioritas": 5,
+        "syarat": {"temuan": "K-BRUTE-TANPA-SUKSES"},
+        "judul": "Percobaan menebak kata sandi terhadap {akun} di {host} (belum ada akses)",
+        "langkah": ["S-PRESERVE-LOGS", "S-VERIFY-WITH-HOST-OWNER"]
+      }
+    ],
+    "umum": {
+      "pola": "P-UMUM",
+      "judul": "Aktivitas mencurigakan di {host} ({n_taktik} taktik)"
+    }
+  }
+}
