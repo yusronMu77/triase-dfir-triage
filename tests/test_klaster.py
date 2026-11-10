@@ -56,6 +56,15 @@ def test_belah_pada_celah_terbesar_dan_seri_paling_awal() -> None:
     assert ids(belah(a, timedelta(minutes=300))) == [["AL-hb01-000001"], ["AL-hb01-000002", "AL-hb01-000003"]]
 
 
+def test_belah_alert_berjarak_rata_dibagi_tengah_tanpa_rekursi() -> None:
+    """1 alert per menit selama 30 jam: dibagi tengah (sedikit bagian), bukan dikupas satu per satu."""
+    a = [mk(i, i) for i in range(1800)]
+    bagian = belah(a, BELAH)
+    assert all(k[-1].ts - k[0].ts <= BELAH for k in bagian)
+    assert len(bagian) <= 8
+    assert min(len(k) for k in bagian) > 100
+
+
 def test_belah_tidak_menyentuh_klaster_pendek() -> None:
     a = [mk(1, 0), mk(2, 100)]
     assert ids(belah(a, BELAH)) == [["AL-hb01-000001", "AL-hb01-000002"]]

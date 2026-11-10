@@ -156,3 +156,42 @@ async def test_batch_terpisah_menyatu_ke_satu_kartu_dengan_versi_baru(db: Databa
     kartu = await _kartu(db)
     assert [(k.card_id, k.latest_version, k.skor) for k in kartu] == [("IC-20261110-001", 2, 72)]
     assert await _jumlah_outbox(db) == 2
+
+
+async def test_kartu_lama_terbelah_semua_anggota_tetap_punya_kartu(db: Database) -> None:
+    """Kartu 0-4.8 jam; alert baru sampai 7.2 jam membuat klaster > 6 jam lalu dibelah: tiap anggota ada di kartunya."""
+    from dataclasses import replace
+    from datetime import timedelta
+
+    from hayabusa import alerts as baca
+
+    contoh = baca("benign/J2.jsonl")[0]
+
+    def mk(i: int):
+        return replace(
+            contoh,
+            alert_id=f"AL-zz01-{i:06d}",
+            evidence_id=f"EV-zz01-{i:06d}",
+            ts=contoh.ts + timedelta(minutes=24 * i),
+        )
+
+    triage = Triage(SumberPalsu(), bawaan())
+    async with db.engine.begin() as conn:
+        await triage.proses(conn, [mk(i) for i in range(13)])
+    assert len(await _kartu(db)) == 1
+    async with db.engine.begin() as conn:
+        await triage.proses(conn, [mk(i) for i in range(13, 19)])
+    async with db.engine.connect() as conn:
+        anggota = dict(
+            (await conn.execute(select(store.klaster_anggota.c.alert_id, store.klaster_anggota.c.card_id))).all()
+        )
+        versi = (
+            await conn.execute(
+                select(store.kartu_versi.c.card_id, store.kartu_versi.c.data).order_by(store.kartu_versi.c.version)
+            )
+        ).all()
+    bukti_terakhir = {card_id: {b["id"] for b in data["kode"]["bukti"]} for card_id, data in versi}
+    assert len(anggota) == 19
+    assert len(bukti_terakhir) == 2  # kartu lama (versi baru) + satu kartu baru
+    for alert_id, card_id in anggota.items():
+        assert alert_id.replace("AL-", "EV-") in bukti_terakhir[card_id], (alert_id, card_id)
