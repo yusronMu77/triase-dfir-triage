@@ -1,56 +1,43 @@
-"""Rakit aplikasi triage.
+"""Rakit aplikasi triage: komponen standar, konsumen `evidence.ingested`, dan router.
 
-Tahap 0: konsumen `evidence.ingested` yang hanya mencatat batch yang diterima (konsumen palsu untuk
-membuktikan rantai outbox -> JetStream -> konsumen idempoten). Dedup, klaster, skor, dan
-`card.skeleton.created` dibangun di Tahap 1.
+Konsumen menghitung klaster, temuan, pola, dan skor secara deterministik, lalu menerbitkan `card.skeleton.created`
+lewat outbox (triage#3). Katalog dimuat dan divalidasi saat start; katalog rusak membuat layanan gagal start.
 """
 
 from astria_common.app import create_app
+from astria_common.auth import ServiceTokenClient
 from astria_common.consumer import Consumer
-from astria_common.log import get_logger
 from astria_common.service import standard_runtime
-from astria_contracts import Envelope
 from fastapi import FastAPI
-from pydantic import BaseModel
-from sqlalchemy import Column, DateTime, Integer, MetaData, Table, Text, func
-from sqlalchemy.ext.asyncio import AsyncConnection
 
-from astria_triage import api
+from astria_triage import api, store
+from astria_triage.ingest_client import IngestClient
+from astria_triage.katalog import bawaan
+from astria_triage.pipeline import Triage
 from astria_triage.settings import Settings
 
-log = get_logger(__name__)
 
-metadata = MetaData()
-received_batches = Table(
-    "received_batches",
-    metadata,
-    Column("event_id", Text, primary_key=True),
-    Column("source_id", Text, nullable=False),
-    Column("job_id", Text, nullable=True),
-    Column("count", Integer, nullable=False),
-    Column("received_at", DateTime(timezone=True), nullable=False, server_default=func.now()),
-)
-
-
-async def on_evidence_ingested(conn: AsyncConnection, envelope: Envelope, data: BaseModel) -> None:
-    await conn.execute(
-        received_batches.insert().values(
-            event_id=envelope.id,
-            source_id=data.source_id,  # type: ignore[attr-defined]
-            job_id=envelope.correlation.job_id,
-            count=data.count,  # type: ignore[attr-defined]
-        )
-    )
-    log.info("batch_bukti_diterima", source_id=data.source_id, count=data.count)  # type: ignore[attr-defined]
+def _ingest(settings: Settings) -> IngestClient:
+    key = settings.service_key_bytes()
+    if key is None:
+        raise RuntimeError("triage: ASTRIA_SERVICE_KEY atau _FILE wajib untuk membaca alert dari ingest")
+    tokens = ServiceTokenClient(settings.service_name, key, settings.identity_url)
+    return IngestClient(tokens, settings.triage_ingest_url)
 
 
 def build_app(settings: Settings | None = None) -> FastAPI:
-    settings = settings or Settings()
-    runtime = standard_runtime(settings, metadata=[metadata])
+    settings = settings or Settings()  # pyright: ignore[reportCallIssue]  # field wajib diisi dari env ASTRIA_*
+    katalog = bawaan()
+    runtime = standard_runtime(settings, metadata=[store.metadata])
     if runtime.db is not None and runtime.bus is not None:
+        triage = Triage(_ingest(settings), katalog)
         runtime.add(
             Consumer(
-                runtime.bus, runtime.db, durable="triage", event_type="evidence.ingested", handler=on_evidence_ingested
+                runtime.bus,
+                runtime.db,
+                durable="triage",
+                event_type="evidence.ingested",
+                handler=triage.on_evidence_ingested,
             )
         )
     return create_app(settings, components=runtime.components, routers=[api.router])

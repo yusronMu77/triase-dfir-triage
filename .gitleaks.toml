@@ -1,0 +1,9 @@
+# Konfigurasi gitleaks untuk repo ini: semua rule bawaan, ditambah satu pengecualian sempit.
+title = "triase-dfir-triage"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Sandi palsu dari data sintetis repo samples (bukan secret); ada di fixture tests/fixtures/samples"
+regexes = ['''Sintetis-Bukan-Rahasia1''']
