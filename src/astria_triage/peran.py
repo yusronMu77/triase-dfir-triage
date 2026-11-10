@@ -27,9 +27,10 @@ class Entitas:
 
 
 def host_utama(alerts: Sequence[Alert]) -> str:
-    """Host paling sering di klaster; seri dipecah urutan abjad."""
-    hitung = Counter(a.host for a in alerts)
-    return min(hitung, key=lambda h: (-hitung[h], h))
+    """Host paling sering di klaster (tidak peka huruf); seri dipecah urutan abjad. Ejaan: yang pertama secara abjad."""
+    hitung = Counter(a.host.casefold() for a in alerts)
+    kunci = min(hitung, key=lambda h: (-hitung[h], h))
+    return min(a.host for a in alerts if a.host.casefold() == kunci)
 
 
 def turunkan(alerts: Sequence[Alert], temuan: Sequence[Temuan]) -> list[Entitas]:
@@ -60,5 +61,5 @@ def turunkan(alerts: Sequence[Alert], temuan: Sequence[Temuan]) -> list[Entitas]
                 if a.event_id == TUGAS_TERJADWAL:
                     pasang("tugas", a.artefak, ARTEFAK_PERSISTENSI, [a])  # satu kata: label templat narrative
     host = host_utama(alerts)
-    pasang("host", host, TERDAMPAK, [a for a in alerts if a.host == host])
+    pasang("host", host, TERDAMPAK, [a for a in alerts if a.host.casefold() == host.casefold()])
     return sorted(hasil.values(), key=lambda e: (e.jenis, e.nilai))

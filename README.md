@@ -91,7 +91,9 @@ Teknik ATT&CK di `kode.teknik_attack` memakai ID kanonik v19 (`T1070.001` dipeta
 - Tabel dibuat dengan `create_all` (belum ada migrasi Alembic), sama dengan layanan lain.
 - Panggilan ke ingest berjalan di dalam transaksi konsumen. Ini aman untuk data demo, tapi transaksi bisa lama untuk batch besar.
 - Kartu lama tidak dihitung ulang bila kartu riwayat datang belakangan, jadi urutan impor memengaruhi faktor R. Impor riwayat dulu.
-- Klaster disusun dari alert dengan host atau akun yang sama dalam rentang 24 jam di sekitar batch. Rantai lintas host yang lebih jauh bisa terpotong.
+- Klaster disusun dari alert tersimpan dalam rentang 24 jam di sekitar batch; host/akun diperluas sampai 4 putaran untuk rantai transitif.
+- Kartu lama yang menyatu ke kartu lain tidak ditutup lewat event (belum ada kontraknya); kartu itu tidak dipakai sebagai sumber R kartu gabungan.
+- Galat data permanen (`batch_ref` tidak valid, bukti tidak dikembalikan ingest) tetap dicoba ulang oleh Consumer common sebelum masuk DLQ.
 - Belum ada: dedup dan linimasa, endpoint reproses, `config.changed` dan status DITAHAN, metrik khusus triage, `audit.record` per kartu.
 
 ## Alur git

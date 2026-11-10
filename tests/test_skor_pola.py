@@ -124,3 +124,22 @@ def test_properti_urutan_acak_paket_hash_sama() -> None:
         acak = list(semua)
         rnd.shuffle(acak)
         assert rakit(acak, KAT).paket_hash == acuan
+
+
+def test_brute_tetap_terdeteksi_walau_pemilik_akun_sukses_dari_ip_lain() -> None:
+    from dataclasses import replace
+
+    from astria_triage.korelasi import K_BRUTE, temukan
+
+    riwayat = alerts("history/WS-ADM-04-brute-awal.jsonl")
+    contoh = riwayat[0]
+    sukses_lain = replace(
+        contoh,
+        alert_id="AL-hb01-000099",
+        evidence_id="EV-hb01-000099",
+        event_id=4624,
+        src_ip="10.0.0.5",
+        ts=contoh.ts.replace(minute=59),
+    )
+    kode = {t.kode for t in temukan([*riwayat, sukses_lain], KAT.korelasi)}
+    assert K_BRUTE in kode

@@ -30,6 +30,7 @@ log = get_logger(__name__)
 _NAMESPACE = uuid.UUID("5b8f2c1e-3d4a-4e6b-9a7c-2f1e0d9c8b7a")
 JANGKAUAN = timedelta(hours=24)
 """Rentang waktu di sekitar batch yang dibaca ulang dari proyeksi untuk menyusun klaster (> jendela belah 6 jam)."""
+MAKS_PERLUASAN = 4
 
 
 def event_id_kartu(card_id: str, version: int) -> str:
@@ -71,27 +72,59 @@ class Triage:
         await store.kunci_kartu(conn)
         await store.simpan_alert(conn, alerts)
         baru = {a.alert_id for a in alerts}
-        hosts = {a.host.casefold() for a in alerts}
-        akun = {a.akun.casefold() for a in alerts if a.akun}
-        dari = min(a.ts for a in alerts) - JANGKAUAN
-        ke = max(a.ts for a in alerts) + JANGKAUAN
-        sekitar = await store.alert_sekitar(conn, hosts, akun, dari, ke)
+        sekitar = await self._sekitar(conn, alerts)
+        bagian = klaster_terbelah(sekitar, self._jendela_host, self._jendela_akun, self._belah)
+        peta = await store.peta_anggota(conn, [a.alert_id for a in sekitar])  # alert -> card_id lama
+
+        # Bagian yang diproses: yang memuat alert baru, ditambah bagian lain yang memuat anggota kartu terdampak
+        # (mis. kartu lama yang terbelah karena alert baru), supaya tidak ada anggota kartu yang tertinggal.
+        terdampak = {
+            peta[a.alert_id]
+            for k in bagian
+            if not baru.isdisjoint(x.alert_id for x in k)
+            for a in k
+            if a.alert_id in peta
+        }
+        dipakai: set[str] = set()
         terbit = 0
-        for kl in klaster_terbelah(sekitar, self._jendela_host, self._jendela_akun, self._belah):
-            if baru.isdisjoint(a.alert_id for a in kl):
+        for kl in bagian:
+            milik = sorted({peta[a.alert_id] for a in kl if a.alert_id in peta})
+            if baru.isdisjoint(a.alert_id for a in kl) and not terdampak.intersection(milik):
                 continue
-            terbit += await self._kartu(conn, kl, trace_id)
+            card_id = next((c for c in milik if c not in dipakai), None)  # card_id terkecil yang belum dipakai
+            if card_id:
+                dipakai.add(card_id)
+            terbit += await self._kartu(conn, kl, card_id, set(milik), trace_id)
         return terbit
 
-    async def _kartu(self, conn: AsyncConnection, kl: Sequence[Alert], trace_id: str | None) -> int:
+    async def _sekitar(self, conn: AsyncConnection, alerts: Sequence[Alert]) -> list[Alert]:
+        """Alert di sekitar batch; host/akun diperluas sampai stabil (maks 4 putaran), untuk rantai transitif."""
+        dari = min(a.ts for a in alerts) - JANGKAUAN
+        ke = max(a.ts for a in alerts) + JANGKAUAN
+        hosts = {a.host.casefold() for a in alerts}
+        akun = {a.akun.casefold() for a in alerts if a.akun}
+        sekitar: list[Alert] = []
+        for _ in range(MAKS_PERLUASAN):
+            sekitar = await store.alert_sekitar(conn, hosts, akun, dari, ke)
+            h2 = hosts | {a.host.casefold() for a in sekitar}
+            k2 = akun | {a.akun.casefold() for a in sekitar if a.akun}
+            if (h2, k2) == (hosts, akun):
+                break
+            hosts, akun = h2, k2
+        return sekitar
+
+    async def _kartu(
+        self, conn: AsyncConnection, kl: Sequence[Alert], card_id: str | None, milik: set[str], trace_id: str | None
+    ) -> int:
         ids = [a.alert_id for a in kl]
-        lama = await store.kartu_anggota(conn, ids)
-        card_id = lama[0] if lama else None  # klaster yang menyatu dengan kartu lama memakai card_id terkecil
         first_ts = min(a.ts for a in kl)
-        riwayat = await store.riwayat(conn, first_ts, self._katalog.skor.pengulangan_hari, card_id)
+        # Kartu lama yang menyatu ke klaster ini tidak boleh menjadi sumber R-nya sendiri.
+        riwayat = await store.riwayat(conn, first_ts, self._katalog.skor.pengulangan_hari, milik | {card_id or ""})
         kartu = rakit(kl, self._katalog, riwayat)
         sebelumnya = await store.baca_klaster(conn, card_id) if card_id else None
         if sebelumnya is not None and sebelumnya.latest_hash == kartu.paket_hash:
+            # Isi kartu sama (mis. alert baru hanya menambah wakil yang sudah ada); keanggotaan tetap dicatat.
+            await store.simpan_klaster(conn, card_id or "", kartu, sebelumnya.latest_version, ids)
             return 0
         version = (sebelumnya.latest_version + 1) if sebelumnya is not None else 1
         card_id = card_id or await store.nomor_kartu_baru(conn, first_ts)
@@ -110,21 +143,8 @@ class Triage:
             trace_id=trace_id,
         )
         sumber_r = f"{kartu.sumber_r.card_id}:{kartu.sumber_r.version}" if kartu.sumber_r else None
-        await store.simpan_versi(
-            conn,
-            card_id=card_id,
-            version=version,
-            data=data,
-            skor=kartu.skor,
-            band=kartu.band,
-            card_hash=kartu.paket_hash,
-            sumber_r=sumber_r,
-            first_ts=kartu.first_ts,
-            last_ts=kartu.last_ts,
-            hosts=kartu.hosts,
-            akun=kartu.akun,
-            alert_ids=ids,
-        )
+        await store.simpan_versi(conn, card_id=card_id, version=version, data=data, kartu=kartu, sumber_r=sumber_r)
+        await store.simpan_klaster(conn, card_id, kartu, version, ids)
         await enqueue(conn, envelope)
         log.info(
             "kartu_terbit", card_id=card_id, version=version, skor=kartu.skor, band=kartu.band, pola=kartu.kode["pola"]

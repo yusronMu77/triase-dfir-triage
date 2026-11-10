@@ -3,7 +3,7 @@
 | Kode | Syarat |
 |---|---|
 | K-LOGON-SUKSES-SETELAH-GAGAL | Logon sukses (4624) akun sama <= jendela setelah >= N gagal (4625) dari IP yang sama |
-| K-BRUTE-TANPA-SUKSES | >= N gagal dari IP sama ke akun sama dalam jendela, tanpa logon sukses akun itu sesudahnya |
+| K-BRUTE-TANPA-SUKSES | >= N gagal dari IP sama ke akun sama dalam jendela, tanpa logon sukses dari IP itu sesudahnya |
 | K-AKUN-BARU-OLEH-AKUN-DIDUGA | Akun dibuat (4720) atau dimasukkan ke grup (4732) oleh akun yang diduga terbobol |
 | K-PERSISTENSI-SETELAH-AKSES | Alert bertaktik persistence di host yang sama setelah logon sukses akun terbobol |
 | K-LOG-DIHAPUS-SETELAH-AKSES | Log dihapus (1102) oleh akun terbobol setelah logon sukses |
@@ -84,8 +84,10 @@ def temukan(alerts: Sequence[Alert], aturan: Korelasi) -> list[Temuan]:
                 terbobol.append(Temuan(K_LOGON, (*sebelum, s), akun=akun, sumber=sumber, host=s.host, sejak=s.ts))
                 break
         else:
+            # Sukses dari IP lain (mis. pemilik akun di stasiunnya sendiri) tidak menghapus temuan brute force;
+            # sukses dari IP yang sama dalam jendela sudah menjadi K-LOGON di atas.
             blok = _gagal_dalam_jendela(daftar, aturan.logon_min_gagal, jendela)
-            if blok and not any(sama(s.akun, akun) and s.ts >= blok[0].ts for s in sukses):
+            if blok and not any(sama(s.akun, akun) and s.src_ip == sumber and s.ts >= blok[0].ts for s in sukses):
                 hasil.append(Temuan(K_BRUTE, blok, akun=akun, sumber=sumber, host=blok[-1].host))
     hasil.extend(terbobol)
 

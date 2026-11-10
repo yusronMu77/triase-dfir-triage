@@ -66,12 +66,23 @@ def klaster(alerts: Iterable[Alert], jendela_host: timedelta, jendela_akun: time
 
 
 def belah(kelompok: Sequence[Alert], maks: timedelta) -> list[list[Alert]]:
-    """Belah pada celah waktu terbesar (seri: celah paling awal) sampai tiap bagian <= `maks`."""
-    urut = sorted(kelompok, key=lambda a: a.kunci_urut)
-    if len(urut) < 2 or urut[-1].ts - urut[0].ts <= maks:
-        return [urut]
-    celah = max(range(1, len(urut)), key=lambda i: (urut[i].ts - urut[i - 1].ts, -i))
-    return belah(urut[:celah], maks) + belah(urut[celah:], maks)
+    """Belah pada celah waktu terbesar sampai tiap bagian <= `maks`.
+
+    Seri dipecah oleh celah yang paling dekat ke tengah bagian (lalu yang paling awal). Rancangan menyebut "paling
+    awal", tetapi itu mengupas alert berjarak rata satu per satu (banyak kartu satu alert); tengah membagi dua.
+    Iteratif dengan tumpukan, jadi tidak ada batas rekursi.
+    """
+    hasil: list[list[Alert]] = []
+    tumpukan = [sorted(kelompok, key=lambda a: a.kunci_urut)]
+    while tumpukan:
+        urut = tumpukan.pop()
+        if len(urut) < 2 or urut[-1].ts - urut[0].ts <= maks:
+            hasil.append(urut)
+            continue
+        tengah = len(urut) / 2
+        celah = max(range(1, len(urut)), key=lambda i: (urut[i].ts - urut[i - 1].ts, -abs(i - tengah), -i))
+        tumpukan.extend([urut[celah:], urut[:celah]])
+    return sorted(hasil, key=lambda k: k[0].kunci_urut)
 
 
 def klaster_terbelah(

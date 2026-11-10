@@ -35,9 +35,11 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncConnection
 
+from astria_triage.kartu import Kartu
 from astria_triage.model import Alert
 from astria_triage.skor import Riwayat
 
+MAKS_BARIS = 1000
 WIB = timezone(timedelta(hours=7))  # UTC+7 tetap, tanpa tzdata (keputusan note app-triage)
 
 metadata = MetaData()
@@ -119,8 +121,12 @@ async def simpan_alert(conn: AsyncConnection, alerts: Iterable[Alert]) -> None:
         }
         for a in sorted(alerts, key=lambda a: a.alert_id)
     ]
-    if baris:
-        await conn.execute(pg_insert(alert_proyeksi).values(baris).on_conflict_do_nothing(index_elements=["alert_id"]))
+    for i in range(0, len(baris), MAKS_BARIS):  # batas parameter terikat PostgreSQL (32767)
+        await conn.execute(
+            pg_insert(alert_proyeksi)
+            .values(baris[i : i + MAKS_BARIS])
+            .on_conflict_do_nothing(index_elements=["alert_id"])
+        )
 
 
 async def alert_sekitar(
@@ -143,22 +149,29 @@ async def kunci_kartu(conn: AsyncConnection) -> None:
     await conn.execute(text("SELECT pg_advisory_xact_lock(hashtext('astria-triage-kartu'))"))
 
 
-async def kartu_anggota(conn: AsyncConnection, alert_ids: Sequence[str]) -> list[str]:
-    rows = await conn.execute(
-        select(klaster_anggota.c.card_id).where(klaster_anggota.c.alert_id.in_(sorted(alert_ids))).distinct()
-    )
-    return sorted(r.card_id for r in rows)
+async def peta_anggota(conn: AsyncConnection, alert_ids: Sequence[str]) -> dict[str, str]:
+    """alert_id -> card_id untuk alert yang sudah menjadi anggota kartu."""
+    hasil: dict[str, str] = {}
+    unik = sorted(set(alert_ids))
+    for i in range(0, len(unik), MAKS_BARIS):
+        rows = await conn.execute(
+            select(klaster_anggota.c.alert_id, klaster_anggota.c.card_id).where(
+                klaster_anggota.c.alert_id.in_(unik[i : i + MAKS_BARIS])
+            )
+        )
+        hasil |= {r.alert_id: r.card_id for r in rows}
+    return hasil
 
 
 async def baca_klaster(conn: AsyncConnection, card_id: str) -> Any:
     return (await conn.execute(select(klaster).where(klaster.c.card_id == card_id))).first()
 
 
-async def riwayat(conn: AsyncConnection, sebelum: datetime, hari: int, kecuali: str | None) -> list[Riwayat]:
+async def riwayat(conn: AsyncConnection, sebelum: datetime, hari: int, kecuali: set[str]) -> list[Riwayat]:
     """Kartu yang awal klasternya dalam `hari` sebelum `sebelum` (bahan faktor R)."""
     q = select(klaster).where(klaster.c.first_ts >= sebelum - timedelta(days=hari), klaster.c.first_ts < sebelum)
     if kecuali:
-        q = q.where(klaster.c.card_id != kecuali)
+        q = q.where(klaster.c.card_id.not_in(sorted(kecuali)))
     rows = await conn.execute(q.order_by(klaster.c.card_id))
     return [Riwayat(r.card_id, r.latest_version, r.band, r.first_ts, tuple(r.hosts), tuple(r.akun)) for r in rows.all()]
 
@@ -175,43 +188,36 @@ async def nomor_kartu_baru(conn: AsyncConnection, waktu: datetime) -> str:
 
 
 async def simpan_versi(
-    conn: AsyncConnection,
-    *,
-    card_id: str,
-    version: int,
-    data: dict[str, Any],
-    skor: int,
-    band: str,
-    card_hash: str,
-    sumber_r: str | None,
-    first_ts: datetime,
-    last_ts: datetime,
-    hosts: Sequence[str],
-    akun: Sequence[str],
-    alert_ids: Sequence[str],
+    conn: AsyncConnection, *, card_id: str, version: int, data: dict[str, Any], kartu: Kartu, sumber_r: str | None
 ) -> None:
     await conn.execute(
         kartu_versi.insert().values(
             card_id=card_id,
             version=version,
             data=data,
-            skor=skor,
-            band=band,
+            skor=kartu.skor,
+            band=kartu.band,
             catalog_version=data["catalog_version"],
             algo_version=data["algo_version"],
-            card_hash=card_hash,
+            card_hash=kartu.paket_hash,
             sumber_r=sumber_r,
         )
     )
+
+
+async def simpan_klaster(
+    conn: AsyncConnection, card_id: str, kartu: Kartu, version: int, alert_ids: Sequence[str]
+) -> None:
+    """Baris `klaster` (rentang, host, akun, versi dan hash terakhir) dan keanggotaan alert, juga bila hash sama."""
     nilai = {
-        "first_ts": first_ts,
-        "last_ts": last_ts,
-        "hosts": list(hosts),
-        "akun": list(akun),
+        "first_ts": kartu.first_ts,
+        "last_ts": kartu.last_ts,
+        "hosts": list(kartu.hosts),
+        "akun": list(kartu.akun),
         "latest_version": version,
-        "latest_hash": card_hash,
-        "skor": skor,
-        "band": band,
+        "latest_hash": kartu.paket_hash,
+        "skor": kartu.skor,
+        "band": kartu.band,
         "updated_at": func.now(),
     }
     await conn.execute(
@@ -219,8 +225,10 @@ async def simpan_versi(
         .values(card_id=card_id, **nilai)
         .on_conflict_do_update(index_elements=["card_id"], set_=nilai)
     )
-    await conn.execute(
-        pg_insert(klaster_anggota)
-        .values([{"alert_id": i, "card_id": card_id} for i in sorted(alert_ids)])
-        .on_conflict_do_update(index_elements=["alert_id"], set_={"card_id": card_id})
-    )
+    for i in range(0, len(alert_ids), MAKS_BARIS):
+        potong = sorted(alert_ids)[i : i + MAKS_BARIS]
+        await conn.execute(
+            pg_insert(klaster_anggota)
+            .values([{"alert_id": a, "card_id": card_id} for a in potong])
+            .on_conflict_do_update(index_elements=["alert_id"], set_={"card_id": card_id})
+        )

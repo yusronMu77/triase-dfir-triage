@@ -101,9 +101,10 @@ def hitung(
         t_ = Faktor("taktik_terjauh", 0, "tanpa taktik")
 
     # A
+    peta_aset = {k.casefold(): v for k, v in katalog.aset.host.items()}
+
     def kelas(host: str) -> tuple[str, bool]:
-        terdaftar = {k.casefold(): v for k, v in katalog.aset.host.items()}
-        return (terdaftar[host.casefold()], True) if host.casefold() in terdaftar else (katalog.aset.bawaan, False)
+        return (peta_aset[host.casefold()], True) if host.casefold() in peta_aset else (katalog.aset.bawaan, False)
 
     host_a = max(sorted(set(hosts)), key=lambda h: sk.aset[kelas(h)[0]])  # type: ignore[index]
     kls, terdaftar = kelas(host_a)
