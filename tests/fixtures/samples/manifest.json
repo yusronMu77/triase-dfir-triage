@@ -12,10 +12,54 @@
       {
         "author": "Zach Mathis",
         "license": "DRL-1.1",
+        "rule_file": "Sec_5140_Info_NetShareAccess.yml",
+        "rule_id": "15d042c1-07c6-4e16-ae7d-e0e556ccd9a8",
+        "rule_title": "NetShare Access",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/ObjectAccess/FileShare/Sec_5140_Info_NetShareAccess.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
         "rule_file": "Sec_4625_Med_LogonFail_WrongPW_PW-Guessing_Correlation.yml",
         "rule_id": "23179f25-6fce-4827-bae1-b219deaf563e",
         "rule_title": "PW Guessing",
         "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4625_Med_LogonFail_WrongPW_PW-Guessing_Correlation.yml"
+      },
+      {
+        "author": "frack113",
+        "license": "DRL-1.1",
+        "rule_file": "proc_creation_win_cmd_del_execution.yml",
+        "rule_id": "2e35d215-673f-ecff-67ad-c9fc3e4ffb87",
+        "rule_title": "File Deletion Via Del",
+        "sigma_derived_from": "379fa130-190e-4c3f-b7bc-6c8e834485f3",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/process_creation/proc_creation_win_cmd_del_execution.yml"
+      },
+      {
+        "author": "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)",
+        "license": "DRL-1.1",
+        "rule_file": "proc_creation_win_whoami_all_execution.yml",
+        "rule_id": "33f733e0-fb92-860f-da22-47ee0186c951",
+        "rule_title": "Enumerate All Information With Whoami.EXE",
+        "sigma_derived_from": "c248c896-e412-4279-8c15-1c558067b6fa",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/process_creation/proc_creation_win_whoami_all_execution.yml"
+      },
+      {
+        "author": "Jose Rodriguez (@Cyb3rPandaH), OTR (Open Threat Research)",
+        "license": "DRL-1.1",
+        "rule_file": "win_security_smb_file_creation_admin_shares.yml",
+        "rule_id": "37f5d188-182d-7a53-dca7-4bebbb6ce43e",
+        "rule_title": "SMB Create Remote File Admin Share",
+        "sigma_derived_from": "b210394c-ba12-4f89-9117-44a2464b9511",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/security/win_security_smb_file_creation_admin_shares.yml"
+      },
+      {
+        "author": "frack113",
+        "license": "DRL-1.1",
+        "rule_file": "proc_creation_win_powershell_encode.yml",
+        "rule_id": "5464890a-e53b-c991-756a-8ac37655adca",
+        "rule_title": "Suspicious Execution of Powershell with Base64",
+        "sigma_derived_from": "fb843269-508c-4b76-8b8d-88679db22ce7",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/process_creation/proc_creation_win_powershell_encode.yml"
       },
       {
         "author": "Zach Mathis",
@@ -45,10 +89,51 @@
       {
         "author": "Zach Mathis",
         "license": "DRL-1.1",
+        "rule_file": "Sec_4688_Low_ProcExec_PossibleLOLBIN-Abuse.yml",
+        "rule_id": "6c34b782-a5b5-4298-80f3-1918caf1f558",
+        "rule_title": "Possible LOLBIN",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/DetailedTracking/ProcessCreation/Sec_4688_Low_ProcExec_PossibleLOLBIN-Abuse.yml"
+      },
+      {
+        "author": "Timur Zinniatullin, Daniil Yugoslavskiy, oscd.community",
+        "license": "DRL-1.1",
+        "rule_file": "proc_creation_win_susp_local_system_owner_account_discovery.yml",
+        "rule_id": "70d8efc3-4098-d71c-be3c-59f75ccb6019",
+        "rule_title": "Local Accounts Discovery",
+        "sigma_derived_from": "502b42de-4306-40b4-9596-6f590c81f073",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/sigma/builtin/process_creation/proc_creation_win_susp_local_system_owner_account_discovery.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
         "rule_file": "Sec_4624_Info_Logon-Type-2-Interactive.yml",
         "rule_id": "7beb4832-f357-47a4-afd8-803d69a5c85c",
         "rule_title": "Logon (Interactive) *Creds in memory*",
         "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4624_Info_Logon-Type-2-Interactive.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_5145_Info_NetShareFileAccess.yml",
+        "rule_id": "8c6ec2b2-8dad-4996-9aba-d659afc1b919",
+        "rule_title": "NetShare File Access",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/ObjectAccess/DetailedFileShare/Sec_5145_Info_NetShareFileAccess.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4624_Info_Logon-Type-10-RemoteInteractive.yml",
+        "rule_id": "a4e05f05-ff88-48b9-8524-a88c1c32fe19",
+        "rule_title": "Logon (RemoteInteractive (RDP)) *Creds in memory*",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4624_Info_Logon-Type-10-RemoteInteractive.yml"
+      },
+      {
+        "author": "Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sec_4625_Low_LogonFail_UnknownErr.yml",
+        "rule_id": "a85096da-be85-48d7-8ad5-2f957cd74daa",
+        "rule_title": "Logon Failure (Unknown Reason)",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4625_Low_LogonFail_UnknownErr.yml"
       },
       {
         "author": "Zach Mathis",
@@ -101,6 +186,15 @@
         "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/Security/LogonLogoff/Logon/Sec_4625_Low_LogonFail_WrongPW.yml"
       },
       {
+        "author": "Florian Roth (Nextron Systems), Zach Mathis",
+        "license": "DRL-1.1",
+        "rule_file": "Sys_104_Med_LogCleared.yml",
+        "rule_id": "ed90ed4f-0d93-4f1a-99a2-4b9003b750a7",
+        "rule_title": "Log File Cleared",
+        "sigma_derived_from": "a62b37e0-45d3-48d9-a517-90c1a1b0186b",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/hayabusa/builtin/System/Sys_104_Med_LogCleared.yml"
+      },
+      {
         "author": "Zach Mathis",
         "license": "DRL-1.1",
         "rule_file": "Sec_4672_Info_AdminLogon.yml",
@@ -130,6 +224,18 @@
       },
       {
         "author": "Yamato Security",
+        "license": "DRL-1.1",
+        "path": "config/eventkey_alias.txt",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/config/eventkey_alias.txt"
+      },
+      {
+        "author": "Yamato Security",
+        "license": "DRL-1.1",
+        "path": "config/windash_characters.txt",
+        "uri": "https://github.com/Yamato-Security/hayabusa-rules/blob/main/config/windash_characters.txt"
+      },
+      {
+        "author": "Yamato Security",
         "license": "AGPL-3.0-only",
         "path": "config/mitre_tactics.txt (repo hayabusa)",
         "uri": "https://github.com/Yamato-Security/hayabusa/blob/v4.3.1/config/mitre_tactics.txt"
@@ -143,14 +249,59 @@
   },
   "berkas": [
     {
+      "baris": 6,
+      "bytes": 4326,
+      "event": 6,
+      "harapan": {
+        "band": "RENDAH",
+        "catatan": "L5 (low, Logon Failure (Unknown Reason): PW EXPIRED) + T0 (tanpa taktik) + A5 (SRV-APP-07 tidak terdaftar, bawaan sedang) + K0 + R0. Maks 3 gagal per 30 menit (< 5): tanpa K-BRUTE-TANPA-SUKSES.",
+        "faktor": [
+          5,
+          0,
+          5,
+          0,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 10,
+        "temuan": []
+      },
+      "jenis": "jinak",
+      "label": {
+        "mulai_utc": "2026-11-11T06:00:03Z",
+        "selesai_utc": "2026-11-11T07:15:04Z",
+        "teknik": [],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "benign/J1.jsonl",
+      "sha256": "a8db586baa465db6247c6c902593d982cf3003cdb105afec42567ee42b1c73a4",
+      "sintetis": true,
+      "skenario": "J1",
+      "spec": "spec/jinak/J1.toml",
+      "spec_id": "j1",
+      "spec_sha256": "76dd8dade797e6e0392148ee2c7a08e9e3d94537e9a611c47c191916b8fd49d5",
+      "spec_versi": 1,
+      "teknik_alert": []
+    },
+    {
       "baris": 4,
       "bytes": 3618,
       "event": 4,
       "harapan": {
         "band": "RENDAH",
-        "catatan": "L5 (low) + T0 (tanpa taktik) + A5 (WS-KEU-02 kritikalitas sedang, asumsi katalog aset) + K0 + R0. Tanpa pola insiden; boleh muncul di digest sebagai hitungan.",
-        "pola": "",
-        "skor": 10
+        "catatan": "L5 (low) + T0 (tanpa taktik) + A5 (WS-KEU-02 kritikalitas sedang di katalog aset) + K0 + R0. Tanpa pola khusus: triage memakai pola umum P-UMUM (kontrak card.skeleton.created mewajibkan pola).",
+        "faktor": [
+          5,
+          0,
+          5,
+          0,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 10,
+        "temuan": []
       },
       "jenis": "jinak",
       "label": {
@@ -164,10 +315,455 @@
       "path": "benign/J2.jsonl",
       "sha256": "497f3266cbdd1626bc9069dbba6f71e8f086606e5a6954f74245e2b3e34340be",
       "sintetis": true,
+      "skenario": "J2",
       "spec": "spec/jinak/J2.toml",
       "spec_id": "j2",
-      "spec_sha256": "726859244eea730cf9a358aa5d880cf7b42df6de2643acfc63c2ea09edd32d52",
-      "spec_versi": 1
+      "spec_sha256": "b5ec860f8006bc61de039978fdb5f002f69f3fbbb3d0187b42fd32cd0239f992",
+      "spec_versi": 1,
+      "teknik_alert": []
+    },
+    {
+      "baris": 4,
+      "bytes": 2915,
+      "event": 4,
+      "harapan": {
+        "band": "RENDAH",
+        "catatan": "L5 (low) + T0 + A5 (SRV-WEB-04 tidak terdaftar) + K0 + R0. 4 logon gagal (< 5): korelasi Hayabusa dan K-BRUTE-TANPA-SUKSES tidak keluar.",
+        "faktor": [
+          5,
+          0,
+          5,
+          0,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 10,
+        "temuan": []
+      },
+      "jenis": "jinak",
+      "label": {
+        "mulai_utc": "2026-11-12T08:10:15Z",
+        "selesai_utc": "2026-11-12T08:10:46Z",
+        "teknik": [],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "benign/J3.jsonl",
+      "sha256": "0dfc3e9502d62cab2473769045d66657a7c52f7e16e50e8d5c15148b540ff615",
+      "sintetis": true,
+      "skenario": "J3",
+      "spec": "spec/jinak/J3.toml",
+      "spec_id": "j3",
+      "spec_sha256": "68149880829acb6739a1764de1dbae63f2f1216e481cfc47340c9df293c34a61",
+      "spec_versi": 1,
+      "teknik_alert": []
+    },
+    {
+      "baris": 1,
+      "bytes": 1308,
+      "event": 1,
+      "harapan": {
+        "band": "RENDAH",
+        "catatan": "L0 (Task Created informational) + T0 + A5 (WS-GDG-09 tidak terdaftar) + K0 + R0. Jalur Program Files tanpa cmd/PowerShell: 'Suspicious Scheduled Task Creation' tidak menyala.",
+        "faktor": [
+          0,
+          0,
+          5,
+          0,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 5,
+        "temuan": []
+      },
+      "jenis": "jinak",
+      "label": {
+        "mulai_utc": "2026-11-12T02:00:41Z",
+        "selesai_utc": "2026-11-12T02:00:42Z",
+        "teknik": [],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "benign/J4.jsonl",
+      "sha256": "6b300c43dcdb8cad8766b50c33afa72ca734ae31a7dc90faf7341f834b8a102c",
+      "sintetis": true,
+      "skenario": "J4",
+      "spec": "spec/jinak/J4.toml",
+      "spec_id": "j4",
+      "spec_sha256": "8f26231f046bb5767048f91340c496cc1183c1ce9d166fc7634ef22c2e953fc3",
+      "spec_versi": 1,
+      "teknik_alert": []
+    },
+    {
+      "baris": 1,
+      "bytes": 523,
+      "event": 1,
+      "harapan": {
+        "band": "SEDANG",
+        "catatan": "L15 (med, Log File Cleared) + T15 (stealth) + A5 (SRV-BKP-01 tidak terdaftar) + K2 + R0. Bukan R6: tanpa tag teknik, bukan level high, tanpa K-LOG-DIHAPUS-SETELAH-AKSES. Positif palsu yang diketahui: triage-0.1.0 belum punya pengecualian pemeliharaan terjadwal, jadi band SEDANG (bahan penyetelan triage#5).",
+        "faktor": [
+          15,
+          15,
+          5,
+          2,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 37,
+        "temuan": []
+      },
+      "jenis": "jinak",
+      "label": {
+        "mulai_utc": "2026-11-13T01:00:07Z",
+        "selesai_utc": "2026-11-13T01:00:08Z",
+        "teknik": [],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "benign/J5.jsonl",
+      "sha256": "57cbda33592bef2bc7414d44d5603f27aa5e1c0b3931e36b2f2c013671dd22f8",
+      "sintetis": true,
+      "skenario": "J5",
+      "spec": "spec/jinak/J5.toml",
+      "spec_id": "j5",
+      "spec_sha256": "57b5840112907f71c007510c63fc7cb8d26528045ee6d983c2c3875e7d594784",
+      "spec_versi": 1,
+      "teknik_alert": []
+    },
+    {
+      "baris": 2,
+      "bytes": 1731,
+      "event": 2,
+      "harapan": {
+        "band": "RENDAH",
+        "catatan": "L0 (informational) + T15 (collection, NetShare Access T1039) + A5 (WS-PJK-14 tidak terdaftar) + K2 + R0. ADMIN$ hanya-baca: 'SMB Create Remote File Admin Share' (R5) tidak menyala.",
+        "faktor": [
+          0,
+          15,
+          5,
+          2,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 22,
+        "temuan": []
+      },
+      "jenis": "jinak",
+      "label": {
+        "mulai_utc": "2026-11-13T03:15:00Z",
+        "selesai_utc": "2026-11-13T03:15:02Z",
+        "teknik": [],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "benign/J6.jsonl",
+      "sha256": "1ba373a9c881a8a8a07606315662db8dbf10869240f22bbce85cf54c367205a3",
+      "sintetis": true,
+      "skenario": "J6",
+      "spec": "spec/jinak/J6.toml",
+      "spec_id": "j6",
+      "spec_sha256": "9f09d774d30aa14424af3c0138a1418e3c9d8add9daf1ed78eaefa385c9cca0f",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1039"
+      ]
+    },
+    {
+      "baris": 13,
+      "bytes": 9174,
+      "event": 12,
+      "harapan": {
+        "band": "SEDANG",
+        "catatan": "L15 (med, korelasi PW Guessing) + T18 (credential-access) + A5 (SRV-FS-02 tidak terdaftar, bawaan sedang) + K2 (1 taktik) + R0.",
+        "faktor": [
+          15,
+          18,
+          5,
+          2,
+          0
+        ],
+        "pola": "P-BRUTE-TANPA-AKSES",
+        "skor": 40,
+        "temuan": [
+          "K-BRUTE-TANPA-SUKSES"
+        ]
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-11T01:05:12Z",
+        "selesai_utc": "2026-11-11T01:06:40Z",
+        "teknik": [
+          "T1110.001"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/r1-brute-force.jsonl",
+      "sha256": "543106514193b5acf012bab9a48ab5310cded018c39df78a9f4b7b8912b1665b",
+      "sintetis": true,
+      "skenario": "R1",
+      "spec": "spec/rantai/r1-brute-force.toml",
+      "spec_id": "r1-brute-force",
+      "spec_sha256": "b447f0cda80ff8d6511e607d3964f68855d0b275b6d430b0caf03991cbbab77a",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1110.003"
+      ]
+    },
+    {
+      "baris": 6,
+      "bytes": 5907,
+      "event": 2,
+      "harapan": {
+        "band": "SEDANG",
+        "catatan": "L15 (med, Suspicious Execution of Powershell with Base64 / Enumerate All Information With Whoami.EXE) + T10 (execution) + A5 (WS-PRJ-21 tidak terdaftar) + K4 (execution, discovery) + R0. Belum ada pola insiden khusus PowerShell di katalog: P-UMUM.",
+        "faktor": [
+          15,
+          10,
+          5,
+          4,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 34,
+        "temuan": []
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-11T09:12:31Z",
+        "selesai_utc": "2026-11-11T09:12:34Z",
+        "teknik": [
+          "T1059.001"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/r2-powershell-encoded.jsonl",
+      "sha256": "2c39ba41424f08cd7788acb26fedeffd08d10ee0e03783f5712d31f44b7bc5a8",
+      "sintetis": true,
+      "skenario": "R2",
+      "spec": "spec/rantai/r2-powershell-encoded.toml",
+      "spec_id": "r2-powershell-encoded",
+      "spec_sha256": "389ce0419885fc5743cc2af6b5faccf5d04d1ccdcbb0b784c0a1479146d497e7",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1033",
+        "T1059.001",
+        "T1087.001"
+      ]
+    },
+    {
+      "baris": 4,
+      "bytes": 4542,
+      "event": 3,
+      "harapan": {
+        "band": "TINGGI",
+        "catatan": "L30 (high, Suspicious Scheduled Task Creation) + T15 (privilege-escalation) + A5 (SRV-APP-05 tidak terdaftar) + K6 (execution, persistence, privilege-escalation) + R0. Tanpa logon gagal sebelumnya: tanpa temuan korelasi, P-UMUM.",
+        "faktor": [
+          30,
+          15,
+          5,
+          6,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 56,
+        "temuan": []
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-11T22:40:05Z",
+        "selesai_utc": "2026-11-11T22:41:18Z",
+        "teknik": [
+          "T1053.005"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/r3-tugas-terjadwal.jsonl",
+      "sha256": "871b424f6fca898253e8861796d838252864e9b51729ffdf17edfefa41e84547",
+      "sintetis": true,
+      "skenario": "R3",
+      "spec": "spec/rantai/r3-tugas-terjadwal.toml",
+      "spec_id": "r3-tugas-terjadwal",
+      "spec_sha256": "a459b4528da1c5278e6198761f7ce4be760b070b0b114cf5a889eefc7b402bd6",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1053.005"
+      ]
+    },
+    {
+      "baris": 2,
+      "bytes": 1968,
+      "event": 2,
+      "harapan": {
+        "band": "SEDANG",
+        "catatan": "L30 (high, User Added To Local Admin Grp) + T12 (persistence) + A5 (SRV-DB-01 tidak terdaftar) + K2 + R0. Pembuat akun tidak diduga terbobol: tanpa K-AKUN-BARU-OLEH-AKUN-DIDUGA.",
+        "faktor": [
+          30,
+          12,
+          5,
+          2,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 49,
+        "temuan": []
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-12T03:20:44Z",
+        "selesai_utc": "2026-11-12T03:20:52Z",
+        "teknik": [
+          "T1136.001",
+          "T1098"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/r4-akun-lokal-baru.jsonl",
+      "sha256": "effc472dcc05dde8d96d51d90a4d49ba57b03ee3aa02734cf80cb4d14147fa93",
+      "sintetis": true,
+      "skenario": "R4",
+      "spec": "spec/rantai/r4-akun-lokal-baru.toml",
+      "spec_id": "r4-akun-lokal-baru",
+      "spec_sha256": "3d5892c181c8e470332a09a68473b3ae54a8ce6b59c7175312ffca7127ab2e25",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1098"
+      ]
+    },
+    {
+      "baris": 5,
+      "bytes": 3961,
+      "event": 4,
+      "harapan": {
+        "band": "TINGGI",
+        "catatan": "L30 (high, SMB Create Remote File Admin Share) + T22 (lateral-movement) + A5 (SRV-HR-02 tidak terdaftar) + K4 (collection, lateral-movement) + R0.",
+        "faktor": [
+          30,
+          22,
+          5,
+          4,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 61,
+        "temuan": []
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-12T13:05:20Z",
+        "selesai_utc": "2026-11-12T13:05:23Z",
+        "teknik": [
+          "T1021.002"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/r5-admin-share.jsonl",
+      "sha256": "4121f54c34c913a89b7d00a8c5a99e99c9aafac07c745062b9771c596cbcea73",
+      "sintetis": true,
+      "skenario": "R5",
+      "spec": "spec/rantai/r5-admin-share.toml",
+      "spec_id": "r5-admin-share",
+      "spec_sha256": "8a43566629d9e2f27f1d2e272e67ee8190e77fe28627c94e8f9c61820aee4451",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1021.002",
+        "T1039"
+      ]
+    },
+    {
+      "baris": 3,
+      "bytes": 2438,
+      "event": 3,
+      "harapan": {
+        "band": "TINGGI",
+        "catatan": "L30 (high, Log Cleared) + T15 (stealth) + A5 (WS-SEK-06 tidak terdaftar) + K2 + R0. Teknik di kartu T1685.005 (alias dari tag T1070.001).",
+        "faktor": [
+          30,
+          15,
+          5,
+          2,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 52,
+        "temuan": []
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-13T00:47:09Z",
+        "selesai_utc": "2026-11-13T00:52:40Z",
+        "teknik": [
+          "T1685.005"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/r6-hapus-log.jsonl",
+      "sha256": "e35a7991a566982c90fe407a42f185ac863c904b5d5cff84bc8a454259270807",
+      "sintetis": true,
+      "skenario": "R6",
+      "spec": "spec/rantai/r6-hapus-log.toml",
+      "spec_id": "r6-hapus-log",
+      "spec_sha256": "c79c7eb949680f312f7d85f30eeb3cc1288f7d339006011388978ba027fdf72c",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1070.001"
+      ]
+    },
+    {
+      "baris": 6,
+      "bytes": 5269,
+      "event": 2,
+      "harapan": {
+        "band": "RENDAH",
+        "catatan": "L5 (low, File Deletion Via Del) + T15 (stealth) + A5 (WS-LAB-12 tidak terdaftar) + K2 + R0. Rantai serangan yang dinilai RENDAH oleh triage-0.1.0 (aturan del hanya low): kasus sulit untuk eval recall.",
+        "faktor": [
+          5,
+          15,
+          5,
+          2,
+          0
+        ],
+        "pola": "P-UMUM",
+        "skor": 27,
+        "temuan": []
+      },
+      "jenis": "rantai",
+      "label": {
+        "mulai_utc": "2026-11-13T11:30:02Z",
+        "selesai_utc": "2026-11-13T11:30:09Z",
+        "teknik": [
+          "T1070.004"
+        ],
+        "toleransi_detik": 60
+      },
+      "license": "belum diputuskan (data sintetis buatan tim)",
+      "origin": "samples gen",
+      "path": "chains/r7-hapus-berkas.jsonl",
+      "sha256": "7abb3a64bbf58a7697adecf575b17ebff1b0fe29ef6d06c78c8c8624c3de398f",
+      "sintetis": true,
+      "skenario": "R7",
+      "spec": "spec/rantai/r7-hapus-berkas.toml",
+      "spec_id": "r7-hapus-berkas",
+      "spec_sha256": "6b5dee0a7a672ca2595cc6183fbb15fe0db5b0a970daffda9b737a79b5b0fd6f",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1070.004"
+      ]
     },
     {
       "baris": 31,
@@ -175,9 +771,27 @@
       "event": 27,
       "harapan": {
         "band": "KRITIS",
-        "catatan": "L30 (high) + T22 (lateral-movement, dari \"Net.EXE Execution\") + A10 (WS-ADM-04 kritikalitas tinggi di katalog aset) + K10 (7 taktik: CredAccess, Persis, PrivEsc, Exec, Stealth, Disc, LatMov) + R5 (kartu SEDANG dari spec/riwayat/WS-ADM-04-brute-awal.toml). Tanpa riwayat: 72 KRITIS.",
+        "band_tanpa_riwayat": "KRITIS",
+        "catatan": "L30 (high) + T22 (lateral-movement, dari \"Net.EXE Execution\") + A10 (WS-ADM-04 kritikalitas tinggi di katalog aset) + K10 (7 taktik: CredAccess, Persis, PrivEsc, Exec, Stealth, Disc, LatMov) + R5 (kartu SEDANG dari history/WS-ADM-04-brute-awal.jsonl, wajib diimpor lebih dulu). Tanpa riwayat: 72 KRITIS.",
+        "faktor": [
+          30,
+          22,
+          10,
+          10,
+          5
+        ],
         "pola": "P-AKUN-DIAMBILALIH",
-        "skor": 77
+        "riwayat": [
+          "history/WS-ADM-04-brute-awal.jsonl"
+        ],
+        "skor": 77,
+        "skor_tanpa_riwayat": 72,
+        "temuan": [
+          "K-AKUN-BARU-OLEH-AKUN-DIDUGA",
+          "K-LOG-DIHAPUS-SETELAH-AKSES",
+          "K-LOGON-SUKSES-SETELAH-GAGAL",
+          "K-PERSISTENSI-SETELAH-AKSES"
+        ]
       },
       "jenis": "rantai",
       "label": {
@@ -197,10 +811,28 @@
       "path": "chains/svc-backup.jsonl",
       "sha256": "de76a576a6556fdf2077e2ac11cd920cb7505e24e7850a050880983da5d38666",
       "sintetis": true,
+      "skenario": "D1",
       "spec": "spec/rantai/svc-backup.toml",
       "spec_id": "svc-backup",
-      "spec_sha256": "0af48daf78c0583bc8bf5b0c9d3a3ea8bc59a4bde46ecf476fb1c53fa472c47d",
-      "spec_versi": 1
+      "spec_sha256": "0988be61d15b7916c6475cb72584396d11f6dbdbe17ac37fd9242b43621aa369",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1007",
+        "T1018",
+        "T1021.002",
+        "T1049",
+        "T1053.005",
+        "T1069.001",
+        "T1069.002",
+        "T1070.001",
+        "T1087.001",
+        "T1087.002",
+        "T1098",
+        "T1110.003",
+        "T1135",
+        "T1136.001",
+        "T1201"
+      ]
     },
     {
       "baris": 7,
@@ -209,8 +841,18 @@
       "harapan": {
         "band": "SEDANG",
         "catatan": "L15 (med, korelasi PW Guessing) + T18 (credential-access) + A10 + K2 (1 taktik) + R0.",
+        "faktor": [
+          15,
+          18,
+          10,
+          2,
+          0
+        ],
         "pola": "P-BRUTE-TANPA-AKSES",
-        "skor": 45
+        "skor": 45,
+        "temuan": [
+          "K-BRUTE-TANPA-SUKSES"
+        ]
       },
       "jenis": "riwayat",
       "label": {
@@ -226,13 +868,49 @@
       "path": "history/WS-ADM-04-brute-awal.jsonl",
       "sha256": "522646cd923f6d054a5443985494944e36dfb61ed250f6632d7338be62d48aea",
       "sintetis": true,
+      "skenario": "H1",
       "spec": "spec/riwayat/WS-ADM-04-brute-awal.toml",
       "spec_id": "ws-adm-04-brute-awal",
-      "spec_sha256": "dc225cb341efaf68623e14213e597a29badbd5b4e867fe3f68ce2ec864f91318",
-      "spec_versi": 1
+      "spec_sha256": "683b186b16f2ad380558e680cbd5e5cd9dfb9ebd94392225561559b8f9fdf44b",
+      "spec_versi": 1,
+      "teknik_alert": [
+        "T1110.003"
+      ]
     }
   ],
   "format": "hayabusa 4.3.1 dfir-timeline -t jsonl -p verbose -U -s",
   "generator": "astria-samples 0.1.0",
-  "sintetis": true
+  "harapan_acuan": "triage-0.1.0, katalog bawaan (taktik v1, skor v1, aset v1, korelasi v1, pola_insiden v1)",
+  "selisih_teknik": {
+    "T1110.001": {
+      "alasan": "Korelasi 'PW Guessing' Hayabusa memberi tag T1110.003 (Password Spraying), padahal polanya banyak kata sandi untuk satu akun = T1110.001 (Password Guessing). Label mengikuti perilaku; triage melaporkan tag dari data.",
+      "tag_alert": "T1110.003"
+    },
+    "T1136.001": {
+      "alasan": "Aturan 'Local User Account Created' memuat tag salah ketik attack.1136.001 (tanpa huruf t), sehingga Hayabusa menaruhnya di OtherTags, bukan MitreTags.",
+      "tag_alert": "attack.1136.001"
+    },
+    "T1685.005": {
+      "alasan": "ATT&CK v19 memindahkan Clear Windows Event Logs dari T1070.001 ke T1685.005; Hayabusa v4.3.1 masih memakai ID lama (keputusan K4, alias di triage).",
+      "tag_alert": "T1070.001"
+    }
+  },
+  "sintetis": true,
+  "urutan_impor": [
+    "history/WS-ADM-04-brute-awal.jsonl",
+    "chains/r1-brute-force.jsonl",
+    "chains/r2-powershell-encoded.jsonl",
+    "chains/r3-tugas-terjadwal.jsonl",
+    "chains/r4-akun-lokal-baru.jsonl",
+    "chains/r5-admin-share.jsonl",
+    "chains/r6-hapus-log.jsonl",
+    "chains/r7-hapus-berkas.jsonl",
+    "chains/svc-backup.jsonl",
+    "benign/J1.jsonl",
+    "benign/J2.jsonl",
+    "benign/J3.jsonl",
+    "benign/J4.jsonl",
+    "benign/J5.jsonl",
+    "benign/J6.jsonl"
+  ]
 }

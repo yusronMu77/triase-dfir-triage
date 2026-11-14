@@ -1,4 +1,4 @@
-"""Golden: tiga berkas samples menghasilkan skor, band, dan pola sesuai `harapan` di manifest."""
+"""Golden: seluruh dataset samples#4 menghasilkan kartu sesuai `harapan` di manifest."""
 
 from __future__ import annotations
 
@@ -99,13 +99,45 @@ def test_j2_10_rendah_pola_umum() -> None:
     kartu = rakit(kl, KAT)
     h = _harapan("benign/J2.jsonl")
     assert (kartu.skor, kartu.band) == (h["skor"], h["band"])
-    assert h["pola"] == "" and kartu.kode["pola"] == POLA_UMUM  # K8: tanpa pola -> pola umum
+    assert h["pola"] == kartu.kode["pola"] == POLA_UMUM
     assert kartu.kode["temuan_korelasi"] == []
     assert kartu.kode["judul"] == "Aktivitas mencurigakan di WS-KEU-02 (0 taktik)"
 
 
-@pytest.mark.parametrize("path", ["history/WS-ADM-04-brute-awal.jsonl", "chains/svc-backup.jsonl", "benign/J2.jsonl"])
+@pytest.mark.parametrize("path", [b["path"] for b in manifest()["berkas"]])
 def test_data_event_lolos_kontrak(path: str) -> None:
     for kl in _klaster(path):
         env = new_event("card.skeleton.created", data_event(rakit(kl, KAT), KAT), event_id="x")
         assert env.data["kode"]["skor"] >= 0
+
+
+def test_semua_kartu_sesuai_manifest_dengan_urutan_impor() -> None:
+    m = manifest()
+    entries = {b["path"]: b for b in m["berkas"]}
+    assert len(entries) == 15
+    assert sorted(m["urutan_impor"]) == sorted(entries)
+    riwayat = []
+    for no, path in enumerate(m["urutan_impor"]):
+        entry = entries[path]
+        h = entry["harapan"]
+        clusters = _klaster(path, f"hb{no:02d}")
+        assert clusters, path
+        for idx, kl in enumerate(clusters):
+            kartu = rakit(kl, KAT, riwayat)
+            assert (kartu.skor, kartu.band, kartu.kode["pola"]) == (h["skor"], h["band"], h["pola"]), path
+            assert [f["nilai"] for f in kartu.kode["faktor"]] == h["faktor"], path
+            assert kartu.kode["temuan_korelasi"] == h["temuan"], path
+            env = new_event("card.skeleton.created", data_event(kartu, KAT), event_id=f"{no}-{idx}")
+            assert env.data["kode"]["pola"] == h["pola"]
+            # Every earlier card is available, as it would be for a real import. This also checks
+            # that unrelated scenarios do not accidentally acquire the history bonus.
+            riwayat.append(Riwayat(f"IC-{no:03d}-{idx}", 1, kartu.band, kartu.first_ts, kartu.hosts, kartu.akun))
+
+
+def test_r1_perbedaan_label_guessing_dan_tag_spraying_tercatat() -> None:
+    entry = next(b for b in manifest()["berkas"] if b["skenario"] == "R1")
+    assert entry["label"]["teknik"] == ["T1110.001"]
+    assert manifest()["selisih_teknik"]["T1110.001"]["tag_alert"] == "T1110.003"
+    (kl,) = _klaster(entry["path"])
+    teknik = {t["id"] for t in rakit(kl, KAT).kode["teknik_attack"]}
+    assert "T1110.003" in teknik and "T1110.001" not in teknik
