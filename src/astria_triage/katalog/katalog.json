@@ -114,5 +114,435 @@
       "pola": "P-UMUM",
       "judul": "Aktivitas mencurigakan di {host} ({n_taktik} taktik)"
     }
+  },
+  "alert_penjelasan": {
+    "versi": 1,
+    "entries": {
+      "e87bd730-df45-4ae9-85de-6c75369c5d29": {
+        "judul": "Logon gagal: kata sandi salah",
+        "penjelasan": "Windows (EventID 4625) mencatat satu percobaan masuk yang gagal karena kata sandi salah. Satu kejadian biasanya wajar; banyak kejadian berturut-turut untuk akun yang sama adalah bahan aturan penebakan kata sandi.",
+        "penyebab_jinak": [
+          "pengguna salah ketik",
+          "skrip atau layanan masih memakai kata sandi lama",
+          "sesi tersimpan dengan kredensial kedaluwarsa"
+        ],
+        "yang_dicek": [
+          "jumlah dan jarak waktu kegagalan untuk akun yang sama",
+          "apakah sumber IP atau host biasa memakai akun ini",
+          "apakah ada logon berhasil sesudahnya"
+        ],
+        "rujukan": [
+          "Windows Security 4625",
+          "Hayabusa: Sec_4625_Low_LogonFail_WrongPW.yml"
+        ]
+      },
+      "a85096da-be85-48d7-8ad5-2f957cd74daa": {
+        "judul": "Logon gagal: alasan tidak dikenal",
+        "penjelasan": "Windows (EventID 4625) mencatat logon gagal dengan alasan di luar kasus kata sandi salah yang dikenal aturan Hayabusa. Alasan sebenarnya harus dibaca dari kolom Status dan SubStatus pada bukti.",
+        "penyebab_jinak": [
+          "akun terkunci, kedaluwarsa, atau dinonaktifkan",
+          "layanan atau tugas batch memakai akun yang sudah berubah",
+          "gangguan sementara pada pengendali domain"
+        ],
+        "yang_dicek": [
+          "nilai Status dan SubStatus di bukti",
+          "apakah pola berulang dengan interval teratur (otomatisasi) atau acak",
+          "apakah akun masih aktif dan siapa pemiliknya"
+        ],
+        "rujukan": [
+          "Windows Security 4625",
+          "Hayabusa: Sec_4625_Low_LogonFail_UnknownErr.yml"
+        ]
+      },
+      "23179f25-6fce-4827-bae1-b219deaf563e": {
+        "judul": "Dugaan menebak kata sandi (korelasi logon gagal)",
+        "penjelasan": "Aturan korelasi Hayabusa menemukan rentetan logon gagal kata sandi salah ke akun yang sama dalam jendela waktu singkat. Ini pola menebak kata sandi; bila disusul logon berhasil dari asal yang sama, akun mungkin sudah diambil alih.",
+        "penyebab_jinak": [
+          "skrip atau layanan dengan kata sandi kedaluwarsa",
+          "pengguna yang berulang kali salah ketik",
+          "akun terkunci oleh aplikasi yang terus mencoba"
+        ],
+        "yang_dicek": [
+          "jumlah percobaan (kolom Count) dan sumber IP",
+          "ada atau tidak logon berhasil setelah rentetan gagal",
+          "apakah sumber IP termasuk host yang dikenal"
+        ],
+        "rujukan": [
+          "T1110.003",
+          "Windows Security 4625",
+          "Hayabusa: Sec_4625_Med_LogonFail_WrongPW_PW-Guessing_Correlation.yml"
+        ]
+      },
+      "c7b22878-e5d8-4c30-b245-e51fd354359e": {
+        "judul": "Logon berhasil lewat jaringan (tipe 3)",
+        "penjelasan": "Windows (EventID 4624, tipe 3) mencatat logon berhasil lewat jaringan, misalnya akses berbagi berkas atau layanan jarak jauh. Kejadian ini sangat umum dan hanya bermakna bila berurutan dengan kejadian lain pada akun atau host yang sama.",
+        "penyebab_jinak": [
+          "akses berbagi berkas oleh pengguna atau layanan",
+          "pembaruan, pencadangan, atau pemantauan terjadwal",
+          "pemetaan drive jaringan"
+        ],
+        "yang_dicek": [
+          "apakah ini logon pertama setelah rentetan logon gagal",
+          "apakah akun dan sumber IP biasa terlihat bersama",
+          "kejadian apa yang menyusul (akun baru, tugas terjadwal, log dihapus)"
+        ],
+        "rujukan": [
+          "Windows Security 4624",
+          "Hayabusa: Sec_4624_Info_Logon-Type-3-Network.yml"
+        ]
+      },
+      "7beb4832-f357-47a4-afd8-803d69a5c85c": {
+        "judul": "Logon interaktif (tipe 2)",
+        "penjelasan": "Windows (EventID 4624, tipe 2) mencatat logon interaktif di konsol komputer. Aturan ini informasional dan menandai bahwa kredensial pengguna berada di memori host selama sesi.",
+        "penyebab_jinak": [
+          "pengguna masuk di komputernya sendiri",
+          "petugas membuka sesi di konsol"
+        ],
+        "yang_dicek": [
+          "apakah akun memang pengguna biasa host ini",
+          "apakah jamnya wajar",
+          "apakah ada logon gagal atau kejadian mencurigakan di sekitar waktu yang sama"
+        ],
+        "rujukan": [
+          "Windows Security 4624",
+          "Hayabusa: Sec_4624_Info_Logon-Type-2-Interactive.yml"
+        ]
+      },
+      "a4e05f05-ff88-48b9-8524-a88c1c32fe19": {
+        "judul": "Logon desktop jarak jauh (RDP, tipe 10)",
+        "penjelasan": "Windows (EventID 4624, tipe 10) mencatat logon lewat desktop jarak jauh (RDP). Aturan ini informasional; yang penting adalah siapa yang masuk, dari IP mana, dan apa yang terjadi sesudahnya di host itu.",
+        "penyebab_jinak": [
+          "administrator atau helpdesk mengelola host dari jauh",
+          "pengguna bekerja lewat RDP yang sah"
+        ],
+        "yang_dicek": [
+          "apakah akun dan sumber IP memang diizinkan RDP ke host ini",
+          "apakah jamnya wajar",
+          "kejadian apa yang menyusul (log dihapus, akun baru, tugas terjadwal)"
+        ],
+        "rujukan": [
+          "Windows Security 4624",
+          "Hayabusa: Sec_4624_Info_Logon-Type-10-RemoteInteractive.yml"
+        ]
+      },
+      "fdd0b325-8b89-469c-8b0c-e5ddfe39b62e": {
+        "judul": "Logon dengan hak istimewa khusus",
+        "penjelasan": "Windows (EventID 4672) mencatat bahwa sebuah sesi logon baru diberi hak istimewa khusus, yang lazim untuk akun administrator. Aturan ini informasional dan menandai sesi berhak tinggi, bukan penyalahgunaan dengan sendirinya.",
+        "penyebab_jinak": [
+          "administrator atau akun layanan berhak tinggi masuk seperti biasa",
+          "tugas pemeliharaan terjadwal"
+        ],
+        "yang_dicek": [
+          "apakah akun memang akun administratif yang diharapkan di host ini",
+          "kejadian apa yang menyusul dari sesi yang sama (LogonId sama)",
+          "apakah logon tersebut berasal dari sumber yang tidak biasa"
+        ],
+        "rujukan": [
+          "Windows Security 4672",
+          "Hayabusa: Sec_4672_Info_AdminLogon.yml"
+        ]
+      },
+      "15d042c1-07c6-4e16-ae7d-e0e556ccd9a8": {
+        "judul": "Akses berbagi jaringan",
+        "penjelasan": "Windows (EventID 5140) mencatat bahwa sebuah berbagi jaringan diakses, termasuk berbagi administratif seperti ADMIN$. Aturan ini informasional; akses ke ADMIN$ atau C$ dari host yang bukan pengelola layak dicek bersama aturan lanjutan.",
+        "penyebab_jinak": [
+          "pengelola atau alat manajemen (patch, inventaris) memakai berbagi administratif",
+          "pengguna membuka berbagi berkas biasa"
+        ],
+        "yang_dicek": [
+          "nama berbagi (ADMIN$, C$, IPC$ atau berbagi biasa)",
+          "akun dan sumber IP pengakses",
+          "apakah ada akses berkas atau pembuatan berkas pada berbagi itu (aturan NetShare File Access)"
+        ],
+        "rujukan": [
+          "T1039",
+          "Windows Security 5140",
+          "Hayabusa: Sec_5140_Info_NetShareAccess.yml"
+        ]
+      },
+      "8c6ec2b2-8dad-4996-9aba-d659afc1b919": {
+        "judul": "Akses berkas pada berbagi jaringan",
+        "penjelasan": "Windows (EventID 5145) mencatat akses ke satu berkas atau folder di berbagi jaringan. Aturan ini informasional dan menunjukkan jalur berkas yang disentuh lewat berbagi.",
+        "penyebab_jinak": [
+          "pengelola menyalin berkas pembaruan atau skrip",
+          "pengguna membuka dokumen di berbagi berkas"
+        ],
+        "yang_dicek": [
+          "jalur berkas (kolom Path) dan jenis berkasnya, mis. berkas yang dapat dieksekusi",
+          "akun dan sumber IP",
+          "apakah berbagi administratif (C$, ADMIN$) yang dipakai"
+        ],
+        "rujukan": [
+          "T1039",
+          "Windows Security 5145",
+          "Hayabusa: Sec_5145_Info_NetShareFileAccess.yml"
+        ]
+      },
+      "37f5d188-182d-7a53-dca7-4bebbb6ce43e": {
+        "judul": "Berkas dibuat di berbagi administratif jarak jauh",
+        "penjelasan": "Aturan Sigma ini mencocokkan pembuatan berkas lewat berbagi administratif seperti C$ atau ADMIN$ (EventID 5145). Pola ini lazim dalam gerak lateral, misalnya menaruh berkas yang dapat dieksekusi di host lain sebelum dijalankan.",
+        "penyebab_jinak": [
+          "alat penyebaran perangkat lunak atau patch memakai berbagi administratif",
+          "administrator menyalin berkas ke host lain"
+        ],
+        "yang_dicek": [
+          "nama dan jenis berkas yang dibuat, serta jalurnya",
+          "apakah akun dan sumber IP termasuk pengelola yang sah",
+          "apakah berkas itu dijalankan sesudahnya (tugas terjadwal, layanan, proses baru)"
+        ],
+        "rujukan": [
+          "T1021.002",
+          "Windows Security 5145",
+          "Hayabusa: win_security_smb_file_creation_admin_shares.yml"
+        ]
+      },
+      "60d768ca-33e8-4f34-b967-14fd7aa18a22": {
+        "judul": "Tugas terjadwal dibuat",
+        "penjelasan": "Windows (EventID 4698) mencatat pembuatan sebuah tugas terjadwal. Aturan ini informasional; tugas terjadwal dipakai untuk pekerjaan rutin tetapi juga untuk persistensi dan eksekusi tertunda.",
+        "penyebab_jinak": [
+          "pembaruan perangkat lunak atau pekerjaan rutin pemeliharaan",
+          "agen manajemen mengatur tugas rutin"
+        ],
+        "yang_dicek": [
+          "nama tugas dan isi aksinya (program yang dijalankan)",
+          "siapa yang membuatnya dan dari sesi logon mana",
+          "apakah tugas dibuat tak lama setelah logon dari sumber baru"
+        ],
+        "rujukan": [
+          "Windows Security 4698",
+          "Hayabusa: Sec_4698_Info_TaskCreated.yml"
+        ]
+      },
+      "cd7d9f05-3bf6-21f6-6686-e602ab6d72ba": {
+        "judul": "Pembuatan tugas terjadwal yang mencurigakan",
+        "penjelasan": "Aturan Sigma ini menandai tugas terjadwal (EventID 4698) dengan ciri yang lazim pada persistensi atau eskalasi hak, berdasarkan isi definisi tugasnya. Taktik pada aturan: eksekusi, eskalasi hak, dan persistensi.",
+        "penyebab_jinak": [
+          "alat pembaruan atau pemeliharaan yang membuat tugas dengan hak tinggi",
+          "pengelola menjadwalkan skrip administratif"
+        ],
+        "yang_dicek": [
+          "program, argumen, dan akun penjalan pada definisi tugas",
+          "siapa pembuatnya dan apakah sesinya baru saja logon dari sumber tak biasa",
+          "apakah berkas yang dijalankan ada di lokasi yang bisa ditulis pengguna biasa"
+        ],
+        "rujukan": [
+          "T1053.005",
+          "Windows Security 4698",
+          "Hayabusa: win_security_susp_scheduled_task_creation.yml"
+        ]
+      },
+      "13edce80-2b02-4469-8de4-a3e37271dcdb": {
+        "judul": "Akun lokal dibuat",
+        "penjelasan": "Windows (EventID 4720) mencatat pembuatan akun pengguna lokal baru. Aturan ini informasional; akun baru yang tidak dikenal, terutama dibuat oleh akun yang baru saja diduga diambil alih, bisa menjadi jalur persistensi.",
+        "penyebab_jinak": [
+          "permintaan resmi pembuatan akun layanan atau pengguna",
+          "penyiapan komputer baru"
+        ],
+        "yang_dicek": [
+          "nama akun baru dan siapa pembuatnya",
+          "apakah ada tiket atau permintaan resmi untuk akun itu",
+          "apakah akun segera dimasukkan ke grup administrator"
+        ],
+        "rujukan": [
+          "Windows Security 4720",
+          "Hayabusa: Sec_4720_Info_AcctCreated_UsrAcctCreated.yml"
+        ]
+      },
+      "6770bbc3-76b1-d22f-6192-d180542dc2a2": {
+        "judul": "Akun baru dibuat lewat net.exe",
+        "penjelasan": "Aturan Sigma ini mencocokkan perintah net.exe yang menambah akun pengguna (net user ... /add) pada pencatatan pembuatan proses (EventID 4688). Pembuatan akun lewat baris perintah tanpa permintaan resmi umum dijumpai pada persistensi.",
+        "penyebab_jinak": [
+          "administrator membuat akun lewat skrip",
+          "otomasi penyiapan host"
+        ],
+        "yang_dicek": [
+          "nama akun dan akun pelaku (kolom User)",
+          "apakah ada permintaan resmi untuk akun itu",
+          "apakah akun dimasukkan ke grup administrator"
+        ],
+        "rujukan": [
+          "T1136.001",
+          "Windows Security 4688",
+          "Hayabusa: proc_creation_win_net_user_add.yml"
+        ]
+      },
+      "e0f16539-f1cb-5cb9-0004-f3a040346952": {
+        "judul": "Eksekusi net.exe",
+        "penjelasan": "Aturan Sigma ini menandai eksekusi net.exe (EventID 4688). Perintah ini dipakai administrator tetapi juga untuk pengenalan lingkungan, pengelolaan akun, dan berbagi; arti sebenarnya ditentukan oleh argumennya.",
+        "penyebab_jinak": [
+          "administrator mengelola akun, grup, atau berbagi",
+          "skrip logon atau pemeliharaan"
+        ],
+        "yang_dicek": [
+          "argumen perintah (net user, net group, net use, net share)",
+          "akun pelaku dan sesinya",
+          "aturan lain pada host yang sama dalam waktu berdekatan, mis. akun baru dibuat"
+        ],
+        "rujukan": [
+          "Windows Security 4688",
+          "Hayabusa: proc_creation_win_net_execution.yml"
+        ]
+      },
+      "611e2e76-a28f-4255-812c-eb8836b2f5bb": {
+        "judul": "Akun ditambahkan ke grup Administrators lokal",
+        "penjelasan": "Windows (EventID 4732) mencatat penambahan anggota ke grup Administrators lokal. Akun yang baru mendapat hak administrator bisa dipakai penyerang untuk bertahan di host; ini bobot tinggi bila akunnya baru dibuat.",
+        "penyebab_jinak": [
+          "administrator memberi hak kepada petugas atau akun layanan sesuai permintaan",
+          "penyiapan host baru"
+        ],
+        "yang_dicek": [
+          "akun yang ditambahkan (SID di bukti) dan akun yang menambahkannya",
+          "apakah akun itu baru dibuat dalam rentang waktu yang sama",
+          "apakah ada permintaan resmi"
+        ],
+        "rujukan": [
+          "T1098",
+          "Windows Security 4732",
+          "Hayabusa: Sec_4732_High_MemberAddedToLocalGrp_Administrators.yml"
+        ]
+      },
+      "c2f690ac-53f8-4745-8cfe-7127dda28c74": {
+        "judul": "Log Security dihapus",
+        "penjelasan": "Windows (EventID 1102) mencatat penghapusan log Security. Menghapus log menghilangkan jejak audit dan menjadi tanda umum upaya menutupi aktivitas; aturan ini bobot tinggi.",
+        "penyebab_jinak": [
+          "pemeliharaan terencana yang membersihkan log",
+          "penyiapan ulang atau pembersihan host uji"
+        ],
+        "yang_dicek": [
+          "akun pelaku dan sesi logonnya (SubjectLogonId)",
+          "apakah ada jadwal pemeliharaan atau tiket untuk penghapusan ini",
+          "aktivitas apa yang terjadi sebelum log dihapus pada host yang sama"
+        ],
+        "rujukan": [
+          "T1070.001",
+          "Windows Security 1102",
+          "Hayabusa: Sec_1102_High_SecLogCleared.yml"
+        ]
+      },
+      "ed90ed4f-0d93-4f1a-99a2-4b9003b750a7": {
+        "judul": "Log sistem atau aplikasi dihapus",
+        "penjelasan": "Windows (EventID 104, log System) mencatat penghapusan sebuah log kejadian, misalnya log operasional layanan tertentu. Nama log yang dihapus ada di bukti; penghapusan log Security ditandai aturan lain dengan bobot lebih tinggi.",
+        "penyebab_jinak": [
+          "pemeliharaan atau rotasi log oleh layanan atau petugas",
+          "pembersihan log operasional yang sudah penuh"
+        ],
+        "yang_dicek": [
+          "nama log yang dihapus (kolom Log) dan akun pelaku",
+          "apakah ada jadwal atau tiket pembersihan",
+          "apakah log Security host yang sama juga dihapus"
+        ],
+        "rujukan": [
+          "Windows System 104",
+          "Hayabusa: Sys_104_Med_LogCleared.yml"
+        ]
+      },
+      "ac933178-c222-430d-8dcf-17b4f3a2fed8": {
+        "judul": "Pembuatan proses (catatan umum)",
+        "penjelasan": "Windows (EventID 4688) mencatat pembuatan sebuah proses. Aturan ini informasional dan hanya merekam baris perintah; nilainya muncul bila dibaca bersama aturan lain yang menilai baris perintah itu.",
+        "penyebab_jinak": [
+          "aktivitas harian pengguna dan layanan",
+          "skrip administratif"
+        ],
+        "yang_dicek": [
+          "baris perintah dan induk proses",
+          "akun pelaku",
+          "aturan lain yang menilai proses yang sama"
+        ],
+        "rujukan": [
+          "Windows Security 4688",
+          "Hayabusa: Sec_4688_Info_ProcExec.yml"
+        ]
+      },
+      "6c34b782-a5b5-4298-80f3-1918caf1f558": {
+        "judul": "Kemungkinan penyalahgunaan alat bawaan Windows",
+        "penjelasan": "Hayabusa menandai pembuatan proses (EventID 4688) yang memakai utilitas bawaan Windows dengan cara yang lazim disalahgunakan (living-off-the-land). Tanda ini lemah sendirian: utilitas yang sama dipakai administrator setiap hari.",
+        "penyebab_jinak": [
+          "administrator memakai PowerShell, cmd, atau utilitas lain untuk pekerjaan sah",
+          "skrip pemeliharaan"
+        ],
+        "yang_dicek": [
+          "baris perintah lengkap dan argumen mencurigakan (encode, jendela tersembunyi, unduhan)",
+          "akun pelaku dan induk prosesnya",
+          "aturan lain yang cocok pada proses yang sama"
+        ],
+        "rujukan": [
+          "Windows Security 4688",
+          "Hayabusa: Sec_4688_Low_ProcExec_PossibleLOLBIN-Abuse.yml"
+        ]
+      },
+      "5464890a-e53b-c991-756a-8ac37655adca": {
+        "judul": "PowerShell dijalankan dengan perintah ter-encode Base64",
+        "penjelasan": "Aturan Sigma ini mencocokkan PowerShell yang dijalankan dengan -EncodedCommand (EventID 4688). Encoding menyembunyikan isi perintah dari pembacaan sekilas dan lazim dipakai untuk eksekusi; isi yang dikodekan harus didekode untuk dinilai.",
+        "penyebab_jinak": [
+          "alat manajemen atau skrip administrasi yang mengirim perintah ter-encode",
+          "agen pemantauan"
+        ],
+        "yang_dicek": [
+          "dekode isi Base64 dan baca perintah sebenarnya",
+          "akun pelaku dan induk proses",
+          "apakah ada opsi tambahan seperti jendela tersembunyi atau tanpa profil"
+        ],
+        "rujukan": [
+          "T1059.001",
+          "Windows Security 4688",
+          "Hayabusa: proc_creation_win_powershell_encode.yml"
+        ]
+      },
+      "70d8efc3-4098-d71c-be3c-59f75ccb6019": {
+        "judul": "Penemuan akun lokal dan pemilik sistem",
+        "penjelasan": "Aturan Sigma ini menandai perintah yang menanyakan identitas atau akun lokal, misalnya whoami, pada pencatatan proses (EventID 4688). Penyerang memakainya untuk mengenali akun dan hak setelah masuk; administrator juga memakainya untuk pemeriksaan.",
+        "penyebab_jinak": [
+          "administrator atau helpdesk memeriksa identitas dan hak",
+          "skrip yang memeriksa akun penjalan"
+        ],
+        "yang_dicek": [
+          "baris perintah dan akun pelaku",
+          "apakah perintah muncul sendirian atau bersama perintah pengenalan lain",
+          "kejadian apa yang menyusul dari sesi yang sama"
+        ],
+        "rujukan": [
+          "T1033",
+          "T1087.001",
+          "Windows Security 4688",
+          "Hayabusa: proc_creation_win_susp_local_system_owner_account_discovery.yml"
+        ]
+      },
+      "33f733e0-fb92-860f-da22-47ee0186c951": {
+        "judul": "whoami.exe dijalankan dengan /all",
+        "penjelasan": "Aturan Sigma ini mencocokkan whoami.exe dengan opsi /all, yang menampilkan akun, grup, dan hak penjalan (EventID 4688). Ini langkah umum pengenalan setelah akses diperoleh; pada pemakaian sah ia dipakai untuk pemecahan masalah.",
+        "penyebab_jinak": [
+          "administrator atau helpdesk memecahkan masalah hak akses",
+          "skrip diagnostik"
+        ],
+        "yang_dicek": [
+          "akun pelaku dan induk proses",
+          "apakah ada perintah pengenalan lain sebelum atau sesudahnya",
+          "kejadian apa yang menyusul dari sesi yang sama"
+        ],
+        "rujukan": [
+          "T1033",
+          "Windows Security 4688",
+          "Hayabusa: proc_creation_win_whoami_all_execution.yml"
+        ]
+      },
+      "2e35d215-673f-ecff-67ad-c9fc3e4ffb87": {
+        "judul": "Berkas dihapus lewat perintah del",
+        "penjelasan": "Aturan Sigma ini mencocokkan penghapusan berkas lewat cmd dengan del (EventID 4688). Penghapusan berkas yang baru dijalankan dapat menghilangkan jejak; penghapusan berkas sementara juga sangat umum pada aktivitas biasa.",
+        "penyebab_jinak": [
+          "pembersihan berkas sementara oleh pengguna, installer, atau skrip",
+          "pemeliharaan disk"
+        ],
+        "yang_dicek": [
+          "jalur dan nama berkas yang dihapus (mis. berkas yang dapat dieksekusi di folder sementara)",
+          "apakah berkas itu baru saja dibuat atau dijalankan",
+          "akun pelaku dan aturan lain pada sesi yang sama"
+        ],
+        "rujukan": [
+          "T1070.004",
+          "Windows Security 4688",
+          "Hayabusa: proc_creation_win_cmd_del_execution.yml"
+        ]
+      }
+    }
   }
 }

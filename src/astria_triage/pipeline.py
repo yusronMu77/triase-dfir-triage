@@ -64,6 +64,11 @@ class Triage:
         if not alerts:
             log.info("batch_tanpa_alert", batch_ref=batch_ref)
             return
+        tanpa = self._katalog.tanpa_penjelasan(a.rule_id for a in alerts)
+        if tanpa:  # ukuran cakupan katalog; RuleID berasal dari input tak tepercaya, jadi dipotong
+            log.warning(
+                "aturan_tanpa_penjelasan", batch_ref=batch_ref, jumlah=len(tanpa), rule_id=[r[:64] for r in tanpa[:10]]
+            )
         terbit = await self.proses(conn, alerts, trace_id=envelope.trace_id)
         log.info("batch_diproses", batch_ref=batch_ref, alert=len(alerts), kartu_terbit=terbit)
 
