@@ -4,6 +4,7 @@
 
 ### Added
 
+- Katalog Penjelas Alert (triage#4): bagian `alert_penjelasan` di `katalog.json` untuk 24 aturan pada dataset samples, `Katalog.penjelasan()` dan `tanpa_penjelasan()`, `alert_penjelasan` di `catalog_version`, log `aturan_tanpa_penjelasan` per batch, serta uji cakupan, bentuk, dan kejujuran rujukan terhadap data sampel.
 - Golden dataset samples#4: seluruh 15 berkas, kontrak kartu, faktor dan temuan, urutan impor riwayat, P-UMUM, serta selisih label T1110.001/tag T1110.003.
 
 - Skor dan kartu deterministik (triage#3): klaster (sapuan + union-find, belah > 6 jam), lima temuan `K-*`, peran entitas, pola dari pohon syarat JSON, skor `L+T+A+K+R` dan band, `teknik_attack` (ID kanonik v19) dan `temuan_korelasi`, `paket_hash` kanonik, versi kartu hanya bila hash berubah, event `card.skeleton.created` lewat outbox.

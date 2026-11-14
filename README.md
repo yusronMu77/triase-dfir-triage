@@ -77,6 +77,8 @@ Teknik ATT&CK di `kode.teknik_attack` memakai ID kanonik v19 (`T1070.001` dipeta
 
 `src/astria_triage/katalog/katalog.json` berisi taktik, bobot skor, aset, ambang korelasi, dan pola. File ini divalidasi Pydantic saat start, jadi katalog rusak membuat layanan gagal start. Tiap bagian punya `versi`, dan versinya ikut ke `catalog_version` di event. Katalog ini sementara sampai layanan `config` siap. Bobot adalah contoh awal; penyetelan lewat triage#5 dari hasil eval.
 
+**Penjelas Alert (`alert_penjelasan`, triage#4).** Bagian ini menjelaskan tiap aturan Hayabusa/Sigma yang muncul di dataset `samples` (24 `RuleID`, kunci `entries` = `RuleID` huruf kecil). Bentuk entri (`judul`, `penjelasan`, `penyebab_jinak`, `yang_dicek`, `rujukan`) sama dengan katalog `alert_penjelasan` di layanan `config`, jadi isinya bisa dipindah apa adanya. Penjelas ditulis manusia, tidak ikut skor, dan tidak mengubah `kode` atau `paket_hash`; hanya versinya yang masuk `catalog_version`. `Katalog.penjelasan(rule_id)` mengembalikan `None` untuk ID kosong, bukan teks, atau tak terdaftar (tanpa galat). Batch yang memuat aturan tanpa penjelas menulis satu log `aturan_tanpa_penjelasan` (ukuran cakupan). Menambah aturan: tulis entri, naikkan `versi` bagian itu, dan pastikan `tests/test_katalog_penjelasan.py` lulus (rujukan EventID, kanal, berkas aturan, dan teknik harus cocok dengan data sampel).
+
 ## Konfigurasi (env `ASTRIA_*`)
 
 | Env | Bawaan | Isi |

@@ -7,6 +7,7 @@ layanan gagal start, jadi tidak ada kartu yang dihitung dengan katalog setengah 
 from __future__ import annotations
 
 import re
+from collections.abc import Iterable
 from functools import cache
 from importlib import resources
 from typing import Annotated, Any, Literal
@@ -21,6 +22,7 @@ _SLUG = r"^[a-z]+(-[a-z]+)*$"
 _TEKNIK = r"^T\d{4}(\.\d{3})?$"
 _TEMUAN = r"^K-[A-Z0-9-]+$"
 _POLA = r"^P-[A-Z0-9-]+$"
+_RULE_ID = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 _PLACEHOLDER = re.compile(r"\{([a-z_]+)\}")
 PLACEHOLDER_POLA = frozenset({"akun", "host"})
 PLACEHOLDER_UMUM = frozenset({"host", "n_taktik"})
@@ -146,6 +148,26 @@ class PolaInsiden(_Ketat):
         return self
 
 
+_Teks = Annotated[str, Field(min_length=1, max_length=600)]
+
+
+class Penjelasan(_Ketat):
+    """Penjelas satu aturan Hayabusa/Sigma; bentuknya sama dengan entri `alert_penjelasan` di layanan config."""
+
+    judul: str = Field(min_length=1, max_length=120)
+    penjelasan: _Teks
+    penyebab_jinak: tuple[_Teks, ...] = Field(min_length=1)
+    yang_dicek: tuple[_Teks, ...] = Field(min_length=1)
+    rujukan: tuple[_Teks, ...] = Field(min_length=1)
+
+
+class AlertPenjelasan(_Ketat):
+    """Katalog `alert_penjelasan`: kunci `entries` adalah `RuleID` Hayabusa (UUID huruf kecil)."""
+
+    versi: int = Field(ge=1)
+    entries: dict[Annotated[str, Field(pattern=_RULE_ID)], Penjelasan]
+
+
 class Katalog(_Ketat):
     catatan: str = Field(default="", alias="_catatan")
     taktik: Taktik
@@ -153,6 +175,7 @@ class Katalog(_Ketat):
     aset: Aset
     korelasi: Korelasi
     pola_insiden: PolaInsiden
+    alert_penjelasan: AlertPenjelasan
 
     @model_validator(mode="after")
     def _taktik_berbobot(self) -> Katalog:
@@ -167,12 +190,23 @@ class Katalog(_Ketat):
     def versi(self) -> dict[str, int]:
         """`catalog_version` di event `card.skeleton.created`."""
         return {
+            "alert_penjelasan": self.alert_penjelasan.versi,
             "aset": self.aset.versi,
             "korelasi": self.korelasi.versi,
             "pola_insiden": self.pola_insiden.versi,
             "skor": self.skor.versi,
             "taktik": self.taktik.versi,
         }
+
+    def penjelasan(self, rule_id: object) -> Penjelasan | None:
+        """Penjelas aturan menurut `RuleID`; ID kosong, bukan teks, atau tak terdaftar -> None (tanpa galat)."""
+        if not isinstance(rule_id, str):
+            return None
+        return self.alert_penjelasan.entries.get(rule_id.strip().lower())
+
+    def tanpa_penjelasan(self, rule_ids: Iterable[str | None]) -> tuple[str, ...]:
+        """`RuleID` unik (terurut) yang belum punya penjelas; `None` dan teks kosong diabaikan."""
+        return tuple(sorted({r for r in rule_ids if r and self.penjelasan(r) is None}))
 
     def slug_taktik(self, nilai: str) -> str | None:
         """Singkatan Hayabusa (`CredAccess`) atau slug (`credential-access`) -> slug; tidak dikenal -> None."""
