@@ -4,6 +4,8 @@
 
 ### Added
 
+- Golden dataset samples#4: seluruh 15 berkas, kontrak kartu, faktor dan temuan, urutan impor riwayat, P-UMUM, serta selisih label T1110.001/tag T1110.003.
+
 - Skor dan kartu deterministik (triage#3): klaster (sapuan + union-find, belah > 6 jam), lima temuan `K-*`, peran entitas, pola dari pohon syarat JSON, skor `L+T+A+K+R` dan band, `teknik_attack` (ID kanonik v19) dan `temuan_korelasi`, `paket_hash` kanonik, versi kartu hanya bila hash berubah, event `card.skeleton.created` lewat outbox.
 - Konsumen `evidence.ingested` nyata: membaca alert dan bukti dari ingest (`/svc/v1`, token layanan, `batch_ref` divalidasi), tabel `alert_proyeksi`, `klaster`, `klaster_anggota`, `kartu_seq`, `kartu_versi`.
 - Katalog sementara berversi (`katalog/katalog.json`, divalidasi Pydantic) sampai layanan `config` siap.
